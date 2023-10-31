@@ -11,6 +11,6 @@ namespace ECO.Domain.Common
         public virtual T Id { get; set; }
         public virtual DateTime CreatedAt { get; set; }
         public virtual DateTime UpdatedAt { get; set; }
-        public virtual bool IsDeleted { get; set; }
+        public virtual bool IsDeleted { get; set; } = false;
     }
 }

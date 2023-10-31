@@ -19,9 +19,10 @@ namespace ECO.Infrastructure.Services
         protected readonly IJwtService _jwtService;
         protected readonly IConfiguration _configuration;
 
-        public UserService(UserManager<AppUser> userManager, IConfiguration configuration)
+        public UserService(UserManager<AppUser> userManager, IJwtService jwtService, IConfiguration configuration)
         {
             _userManager = userManager;
+            _jwtService = jwtService;
             _configuration = configuration;
         }
 
@@ -41,6 +42,11 @@ namespace ECO.Infrastructure.Services
             return null;
         }
 
+        public Task ChangePassword(ChangePasswordDTO changePasswordDTO)
+        {
+            throw new NotImplementedException();
+        }
+
         public DataResult<AppUser> GetUsersPaging(DataRequest request)
         {
             return _userManager.Users.ToDataResult(request);
@@ -57,15 +63,13 @@ namespace ECO.Infrastructure.Services
 
             var roles = await _userManager.GetRolesAsync(user);
 
-            var UserToken = new UserToken()
+            return new UserToken()
             {
                 UserId = user.Id,
-                Roles= roles,
-                Email= email,
+                Roles = roles,
+                Email = email,
                 Token = await _jwtService.GenerateUserTokenAsync(user),
             };
-
-            return UserToken;
         }
 
         public async Task Register(RegisterDTO user)
@@ -75,7 +79,7 @@ namespace ECO.Infrastructure.Services
                     FirstName = user.FirstName,
                     LastName = user.LastName,
                     UserName = user.Email,
-                    BirtDay = user.BirthDay,
+                    BirthDay = user.BirthDay,
                     Gender = user.Gender,
                     Email = user.Email
                 };

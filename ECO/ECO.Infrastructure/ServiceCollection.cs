@@ -22,15 +22,17 @@ namespace ECO.Infrastructure
     {
         public static IServiceCollection AddBusinessService(this IServiceCollection services)
         {
-            services.AddScoped(typeof(IBaseService<,>), typeof(BaseService<,>));
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IJwtService, JwtService>();
+            services.AddScoped<ICategoryService, CategoryService>();
             return services;
         }
 
         public static IServiceCollection AddRepository(this IServiceCollection services)
         {
             services.AddScoped(typeof(IBaseRepository<,>), typeof(BaseRepository<,>));
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
             return services;
         }
 

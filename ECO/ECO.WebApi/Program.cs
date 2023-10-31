@@ -9,7 +9,8 @@ builder.Services
     .AddAuthentication(config)  
     .AddRepository()
     .AddBusinessService()
-    .AddWebAPI();
+    .AddWebAPI()
+    .AddSwagger();
 
 var app = builder.Build();
 

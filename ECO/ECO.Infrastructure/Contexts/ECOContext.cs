@@ -57,22 +57,22 @@ namespace ECO.Infrastructure.Contexts
             builder.Entity<Rating>().HasOne(x => x.Product).WithMany(x => x.Ratings).HasForeignKey(x => x.ProductId).OnDelete(DeleteBehavior.ClientNoAction);
             builder.Entity<Rating>().HasOne(x => x.Customer).WithMany(x => x.Ratings).HasForeignKey(x => x.CustomerId).OnDelete(DeleteBehavior.ClientNoAction);
 
-            //builder.Entity<AppRole>()
-            //  .HasData(
-            //  new AppRole { Id = Guid.NewGuid().ToString(), Name = "Admin", Description = "Admin", NormalizedName = "ADMIN" },
-            //  new AppRole { Id = Guid.NewGuid().ToString(), Name = "Staff", Description = "Staff", NormalizedName = "STAFF" },
-            //  new AppRole { Id = Guid.NewGuid().ToString(), Name = "Customer", Description = "Customer", NormalizedName = "CUSTOMER" }
-            //  );
+            builder.Entity<AppRole>()
+              .HasData(
+              new AppRole { Id = Guid.NewGuid().ToString(), Name = "Admin", Description = "Admin", NormalizedName = "ADMIN" },
+              new AppRole { Id = Guid.NewGuid().ToString(), Name = "Staff", Description = "Staff", NormalizedName = "STAFF" },
+              new AppRole { Id = Guid.NewGuid().ToString(), Name = "Customer", Description = "Customer", NormalizedName = "CUSTOMER" }
+              );
 
-            //builder.Entity<Size>().HasData(
-            //    new Size { Id = 1, SizeName = "S" },
-            //    new Size { Id = 2, SizeName = "M" },
-            //    new Size { Id = 3, SizeName = "L" },
-            //    new Size { Id = 4, SizeName = "XL" },
-            //    new Size { Id = 5, SizeName = "2XL" },
-            //    new Size { Id = 6, SizeName = "3XL" },
-            //    new Size { Id = 7, SizeName = "4XL" }
-            //); ;
+            builder.Entity<Size>().HasData(
+                new Size { Id = 1, SizeName = "S" },
+                new Size { Id = 2, SizeName = "M" },
+                new Size { Id = 3, SizeName = "L" },
+                new Size { Id = 4, SizeName = "XL" },
+                new Size { Id = 5, SizeName = "2XL" },
+                new Size { Id = 6, SizeName = "3XL" },
+                new Size { Id = 7, SizeName = "4XL" }
+            );
         }
 
         public override int SaveChanges()
@@ -100,7 +100,6 @@ namespace ECO.Infrastructure.Contexts
                         changedOrAddedItem.CreatedAt = DateTime.Now;
                     }
                     changedOrAddedItem.UpdatedAt = DateTime.Now;
-                    changedOrAddedItem.IsDeleted = false;
                 }
             }
         }

@@ -24,7 +24,7 @@ namespace ECO.WebApi.Controllers
             try
             {
                 var appUser = await _userService.Login(loginDTO.Email, loginDTO.Password);
-                return NoContent();
+                return Ok(appUser);
             }
             catch (Exception ex)
             {

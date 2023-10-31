@@ -2,18 +2,45 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ECO.Application.Repositories
 {
-    public interface IBaseRepository<TKey, TEntity> where TEntity : class
+    public interface IBaseRepository<T, K> where T : class
+
     {
-        public Task<TEntity> CreateAsync(TEntity entity);
-        public Task<List<TEntity>> GetAllAsync();
-        public Task<TEntity> FindAsync(TKey id);
-        public Task<int> DeleteAsync(TKey id);
-        public Task<int> UpdateAsync(TEntity entity);
-        public DataResult<TEntity> GetPaging(DataRequest request);
+        Task<T> FindById(K id, Expression<Func<T, object>>[] includes);
+
+        Task<T> FindSingle(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes);
+
+        IQueryable<T> FindAll(params Expression<Func<T, object>>[] includes);
+
+        IQueryable<T> FindAll(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes);
+
+        Task<List<T>> GetList(params Expression<Func<T, object>>[] includes);
+
+        Task<List<T>> GetList(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes);
+
+        Task Add(T entity);
+
+        Task<T> CreateAndGetEntity(T entity);
+
+        Task AddMultiple(List<T> entities);
+
+        Task Update(T entity, params string[] propertiesToExclude);
+
+        Task Update(T entity);
+
+        Task Remove(T entity);
+
+        Task Remove(K id);
+
+        Task RemoveMultiple(List<T> entities);
+
+        Task RemoveSoft(K id);
+
+        Task RemoveSoftMultiple(List<T> entities);
     }
 }
