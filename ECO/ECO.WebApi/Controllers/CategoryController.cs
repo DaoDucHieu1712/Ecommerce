@@ -1,5 +1,6 @@
 ﻿using ECO.Application.DTOs.Category;
 using ECO.Application.Services;
+using ECO.DataTable;
 using ECO.Domain.Entites;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -80,6 +81,19 @@ namespace ECO.WebApi.Controllers
             {
                 await _categoryService.Remove(id);
                 return Ok("Delete Successful !");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> FilterPaging(DataRequest req)
+        {
+            try
+            {
+                return Ok(_categoryService.GetPaging(req));
             }
             catch (Exception ex)
             {

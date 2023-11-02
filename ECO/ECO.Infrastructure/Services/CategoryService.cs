@@ -2,6 +2,7 @@
 using ECO.Application.DTOs.Category;
 using ECO.Application.Repositories;
 using ECO.Application.Services;
+using ECO.DataTable;
 using ECO.Domain.Entites;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -37,6 +38,11 @@ namespace ECO.Infrastructure.Services
         public async Task<List<CategoryResponseDTO>> GetAll()
         {
             return _mapper.Map<List<CategoryResponseDTO>>(await _categoryRepository.FindAll().ToListAsync());
+        }
+
+        public DataResult<CategoryResponseDTO> GetPaging(DataRequest req)
+        {
+            return _mapper.Map<DataResult<CategoryResponseDTO>>(_categoryRepository.GetPaging(req));
         }
 
         public async Task Remove(int id)

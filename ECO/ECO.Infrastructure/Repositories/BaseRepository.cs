@@ -286,5 +286,10 @@ namespace ECO.Infrastructure.Repositories
             }
         }
         
+        public DataResult<T> GetPaging(DataRequest request)
+        {
+            return _context.Set<T>().ToDataResult(request);
+        }
+        
     }
 }

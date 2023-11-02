@@ -25,6 +25,8 @@ namespace ECO.Infrastructure
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IJwtService, JwtService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ISizeService, SizeService>();
+            services.AddScoped<IColorService, ColorService>();
             return services;
         }
 
@@ -33,6 +35,8 @@ namespace ECO.Infrastructure
             services.AddScoped(typeof(IBaseRepository<,>), typeof(BaseRepository<,>));
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IColorRepository, ColorRepository>();
+            services.AddScoped<ISizeRepository, SizeRepository>();
             return services;
         }
 

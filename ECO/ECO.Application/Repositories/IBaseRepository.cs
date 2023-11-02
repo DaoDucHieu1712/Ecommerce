@@ -42,5 +42,7 @@ namespace ECO.Application.Repositories
         Task RemoveSoft(K id);
 
         Task RemoveSoftMultiple(List<T> entities);
+
+        public DataResult<T> GetPaging(DataRequest request);
     }
 }

@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using ECO.Application.DTOs.Category;
+using ECO.Application.DTOs.Color;
 using ECO.Application.DTOs.Product;
+using ECO.Application.DTOs.Size;
 using ECO.Domain.Entites;
 using System;
 using System.Collections.Generic;
@@ -25,6 +27,16 @@ namespace ECO.Infrastructure.Mappers
                 opt => opt.MapFrom(src => src.Category.Name))
                 .ReverseMap();
             CreateMap<Product, ProductRequestDTO>().ReverseMap();
+            #endregion
+
+            #region color
+            CreateMap<Color, ColorResponseDTO>().ReverseMap();
+            CreateMap<Color, ColorRequestDTO>().ReverseMap();
+            #endregion
+
+            #region size
+            CreateMap<Size, SizeResponseDTO>().ReverseMap();
+            CreateMap<Size, SizeRequestDTO>().ReverseMap();
             #endregion
         }
     }

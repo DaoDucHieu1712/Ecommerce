@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ECO.DataTable;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,5 +14,6 @@ namespace ECO.Application.Services
         Task Add(TEntityRequestDTO entity);
         Task Update(TEntityRequestDTO entity);
         Task Remove(Tkey id);
+        DataResult<TEntityResponseDTO> GetPaging(DataRequest req);
     }
 }

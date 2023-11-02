@@ -2,6 +2,7 @@
 using ECO.Application.DTOs.Product;
 using ECO.Application.Repositories;
 using ECO.Application.Services;
+using ECO.DataTable;
 using ECO.Domain.Entites;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -36,6 +37,11 @@ namespace ECO.Infrastructure.Services
         public async Task<List<ProductResponseDTO>> GetAll()
         {
             return _mapper.Map<List<ProductResponseDTO>>(await _productRepository.FindAll(x => x.Category).ToListAsync());
+        }
+
+        public DataResult<ProductResponseDTO> GetPaging(DataRequest req)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task Remove(int id)
