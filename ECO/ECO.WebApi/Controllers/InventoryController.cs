@@ -1,4 +1,5 @@
-﻿using ECO.Application.DTOs.Size;
+﻿using ECO.Application.DTOs.Inventory;
+using ECO.Application.Repositories;
 using ECO.Application.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -7,26 +8,24 @@ namespace ECO.WebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class SizeController : ControllerBase
+    public class InventoryController : ControllerBase
     {
-        private readonly ISizeService _sizeService;
+        private readonly IInventoryService _inventoryService;
 
-        public SizeController(ISizeService sizeService)
+        public InventoryController(IInventoryService inventoryService)
         {
-            _sizeService = sizeService;
+            _inventoryService = inventoryService;
         }
-
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             try
             {
-                return Ok(await _sizeService.GetAll());
+                return Ok(await _inventoryService.GetAll());
             }
             catch (Exception ex)
             {
-
                 return StatusCode(500, ex.Message);
             }
         }
@@ -36,42 +35,39 @@ namespace ECO.WebApi.Controllers
         {
             try
             {
-                return Ok(await _sizeService.FindById(id));
+                return Ok(await _inventoryService.FindById(id));
             }
             catch (Exception ex)
             {
-
                 return StatusCode(500, ex.Message);
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(SizeRequestDTO sizeRequestDTO)
+        public async Task<IActionResult> Create(InventoryRequestDTO inventoryRequestDTO)
         {
             try
             {
-                await _sizeService.Add(sizeRequestDTO);
+                await _inventoryService.Add(inventoryRequestDTO);
                 return NoContent();
             }
             catch (Exception ex)
             {
-
                 return StatusCode(500, ex.Message);
             }
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, SizeRequestDTO sizeRequestDTO)
+        public async Task<IActionResult> Update(int id, InventoryRequestDTO inventoryRequestDTO)
         {
             try
             {
-                sizeRequestDTO.Id = id;
-                await _sizeService.Update(sizeRequestDTO);
+                inventoryRequestDTO.Id = id;
+                await _inventoryService.Update(inventoryRequestDTO);
                 return NoContent();
             }
             catch (Exception ex)
             {
-
                 return StatusCode(500, ex.Message);
             }
         }
@@ -81,12 +77,11 @@ namespace ECO.WebApi.Controllers
         {
             try
             {
-                await _sizeService.Remove(id);
+                await _inventoryService.Remove(id);
                 return NoContent();
             }
             catch (Exception ex)
             {
-
                 return StatusCode(500, ex.Message);
             }
         }

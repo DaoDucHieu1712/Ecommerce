@@ -31,12 +31,12 @@ namespace ECO.Infrastructure.Services
 
         public async Task<ProductResponseDTO> FindById(int id)
         {
-            return _mapper.Map<ProductResponseDTO>(await _productRepository.FindSingle(x => x.Id == id));
+            return _mapper.Map<ProductResponseDTO>(await _productRepository.FindSingle(x => x.Id == id, x => x.Category, x => x.Inventories));
         }
 
         public async Task<List<ProductResponseDTO>> GetAll()
         {
-            return _mapper.Map<List<ProductResponseDTO>>(await _productRepository.FindAll(x => x.Category).ToListAsync());
+            return _mapper.Map<List<ProductResponseDTO>>(await _productRepository.FindAll(x => x.Category, x => x.Inventories).ToListAsync());
         }
 
         public DataResult<ProductResponseDTO> GetPaging(DataRequest req)

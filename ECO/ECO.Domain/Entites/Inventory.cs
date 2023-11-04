@@ -12,16 +12,17 @@ namespace ECO.Domain.Entites
     public class Inventory : BaseEntity<int>
     {
         public int ProductId { get; set; }
-        public int SizeId { get; set; }
-        public int ColorId { get; set; }
+        public int? SizeId { get; set; }
+        public int? ColorId { get; set; }
         public int Quantity { get; set; }
+        public bool? IsOnly { get; set; }
         public decimal? UnitPrice { get; set; }
         [ForeignKey(nameof(ProductId))]
         public Product Product { get; set; }
         [ForeignKey(nameof(SizeId))]
-        public Size Size { get; set; }
+        public Size? Size { get; set; }
         [ForeignKey(nameof(ColorId))]
-        public Color Color { get; set; }
+        public Color? Color { get; set; }
 
     }
 }

@@ -31,6 +31,7 @@ namespace ECO.Infrastructure.Contexts
         public virtual DbSet<Rating> Ratings { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<OrderDetail> OrderDetails { get; set; }
+        public virtual DbSet<Discount> Discounts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

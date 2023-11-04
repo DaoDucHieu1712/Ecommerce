@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ECO.Application.DTOs.Category;
 using ECO.Application.DTOs.Color;
+using ECO.Application.DTOs.Inventory;
 using ECO.Application.DTOs.Product;
 using ECO.Application.DTOs.Size;
 using ECO.Domain.Entites;
@@ -16,28 +17,55 @@ namespace ECO.Infrastructure.Mappers
     {
         public MapperProfile() {
 
-            #region category
+            CategoryMapper();
+            ProductMapper();
+            ColorMapper();
+            SizeMapper();
+            InventoryMapper();
+        }
+
+        public void CategoryMapper()
+        {
             CreateMap<Category, CategoryResponseDTO>().ReverseMap();
             CreateMap<Category, CategoryRequestDTO>().ReverseMap();
-            #endregion
+        }
 
-            #region product
+        public void ProductMapper()
+        {
             CreateMap<Product, ProductResponseDTO>()
                 .ForMember(x => x.CategoryName,
                 opt => opt.MapFrom(src => src.Category.Name))
+                .ForMember(x => x.Quantity,
+                opt => opt.MapFrom(src => src.Inventories.Sum(x => x.Quantity)))
                 .ReverseMap();
             CreateMap<Product, ProductRequestDTO>().ReverseMap();
-            #endregion
+        }
 
-            #region color
+        public void ColorMapper()
+        {
             CreateMap<Color, ColorResponseDTO>().ReverseMap();
             CreateMap<Color, ColorRequestDTO>().ReverseMap();
-            #endregion
+        }
 
-            #region size
+        public void SizeMapper()
+        {
             CreateMap<Size, SizeResponseDTO>().ReverseMap();
             CreateMap<Size, SizeRequestDTO>().ReverseMap();
-            #endregion
+        }
+
+        public void InventoryMapper()
+        {
+            CreateMap<Inventory, InventoryResponseDTO>()
+                .ForMember(x => x.InventoryName,
+                opt => opt.MapFrom(src => src.Size.SizeName + "-" + src.Color.ColorName))
+                .ForMember(x => x.ProductName, 
+                opt => opt.MapFrom(src => src.Product.Name))
+                 .ForMember(x => x.SizeName,
+                opt => opt.MapFrom(src => src.Size.SizeName))
+                  .ForMember(x => x.ColorName,
+                opt => opt.MapFrom(src => src.Color.ColorName))
+                .ReverseMap();
+            CreateMap<Inventory, InventoryRequestDTO>().ReverseMap();
         }
     }
 }

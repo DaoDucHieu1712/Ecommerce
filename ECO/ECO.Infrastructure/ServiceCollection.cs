@@ -27,6 +27,8 @@ namespace ECO.Infrastructure
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ISizeService, SizeService>();
             services.AddScoped<IColorService, ColorService>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IInventoryService, InventoryService>();
             return services;
         }
 
@@ -37,6 +39,8 @@ namespace ECO.Infrastructure
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IColorRepository, ColorRepository>();
             services.AddScoped<ISizeRepository, SizeRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IInventoryRepository, InventoryRepository>();
             return services;
         }
 
