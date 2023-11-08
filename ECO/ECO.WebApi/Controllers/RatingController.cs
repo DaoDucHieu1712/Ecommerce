@@ -1,5 +1,7 @@
-﻿using ECO.Application.DTOs.Products;
+﻿using ECO.Application.DTOs.Discount;
+using ECO.Application.DTOs.Rating;
 using ECO.Application.Services;
+using ECO.Infrastructure.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,12 +9,13 @@ namespace ECO.WebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class ProductController : ControllerBase
+    public class RatingController : ControllerBase
     {
-        private readonly IProductService _productService;
-        public ProductController(IProductService productService)
+        private readonly IRatingService _ratingService;
+
+        public RatingController(IRatingService ratingService)
         {
-            _productService = productService;
+            _ratingService = ratingService;
         }
 
         [HttpGet]
@@ -20,21 +23,7 @@ namespace ECO.WebApi.Controllers
         {
             try
             {
-                return Ok(await _productService.GetAll());
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Create(ProductRequestDTO productRequestDTO)
-        {
-            try
-            {
-                await _productService.Add(productRequestDTO);
-                return Ok("Add successful !");
+                return Ok(await _ratingService.GetAll());
             }
             catch (Exception ex)
             {
@@ -47,7 +36,22 @@ namespace ECO.WebApi.Controllers
         {
             try
             {
-                return Ok(await _productService.FindById(id));
+                return Ok(await _ratingService.FindById(id));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Create(RatingRequestDTO ratingRequestDTO)
+        {
+            try
+            {
+                await _ratingService.Add(ratingRequestDTO);
+                return NoContent();
             }
             catch (Exception ex)
             {
@@ -56,13 +60,13 @@ namespace ECO.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, ProductRequestDTO productRequestDTO)
+        public async Task<IActionResult> Update(int id, RatingRequestDTO ratingRequestDTO)
         {
             try
             {
-                productRequestDTO.Id = id;
-                await _productService.Update(productRequestDTO);
-                return Ok("Update Successful !");
+                ratingRequestDTO.Id = id;
+                await _ratingService.Add(ratingRequestDTO);
+                return NoContent();
             }
             catch (Exception ex)
             {
@@ -71,12 +75,12 @@ namespace ECO.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Remove(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             try
             {
-                await _productService.Remove(id);
-                return Ok("Delete Successful !");
+                await _ratingService.Remove(id);
+                return NoContent();
             }
             catch (Exception ex)
             {

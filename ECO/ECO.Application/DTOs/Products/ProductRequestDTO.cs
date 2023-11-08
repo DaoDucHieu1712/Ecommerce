@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace ECO.Application.DTOs.Product
+namespace ECO.Application.DTOs.Products
 {
     public class ProductRequestDTO
     {

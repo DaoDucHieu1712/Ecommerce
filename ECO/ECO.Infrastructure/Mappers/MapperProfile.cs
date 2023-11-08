@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using ECO.Application.DTOs.Category;
 using ECO.Application.DTOs.Color;
+using ECO.Application.DTOs.Discount;
 using ECO.Application.DTOs.Inventory;
-using ECO.Application.DTOs.Product;
+using ECO.Application.DTOs.Products;
+using ECO.Application.DTOs.Rating;
 using ECO.Application.DTOs.Size;
 using ECO.Domain.Entites;
 using System;
@@ -22,6 +24,8 @@ namespace ECO.Infrastructure.Mappers
             ColorMapper();
             SizeMapper();
             InventoryMapper();
+            DiscountMapper();
+            RatingMapper();
         }
 
         public void CategoryMapper()
@@ -66,6 +70,18 @@ namespace ECO.Infrastructure.Mappers
                 opt => opt.MapFrom(src => src.Color.ColorName))
                 .ReverseMap();
             CreateMap<Inventory, InventoryRequestDTO>().ReverseMap();
+        }
+
+        public void DiscountMapper()
+        {
+            CreateMap<Discount, DiscountResponseDTO>().ReverseMap();
+            CreateMap<Discount, DiscountRequestDTO>().ReverseMap();
+        }
+
+        public void RatingMapper()
+        {
+            CreateMap<Rating, RatingResponseDTO>().ReverseMap();
+            CreateMap<Rating, RatingRequestDTO>().ReverseMap();
         }
     }
 }

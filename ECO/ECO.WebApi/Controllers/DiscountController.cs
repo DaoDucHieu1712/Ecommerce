@@ -1,18 +1,20 @@
-﻿using ECO.Application.DTOs.Products;
+﻿using ECO.Application.DTOs.Discount;
 using ECO.Application.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Runtime.CompilerServices;
 
 namespace ECO.WebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class ProductController : ControllerBase
+    public class DiscountController : ControllerBase
     {
-        private readonly IProductService _productService;
-        public ProductController(IProductService productService)
+        private readonly IDiscountService _discountService;
+
+        public DiscountController(IDiscountService discountService)
         {
-            _productService = productService;
+            _discountService = discountService;
         }
 
         [HttpGet]
@@ -20,23 +22,9 @@ namespace ECO.WebApi.Controllers
         {
             try
             {
-                return Ok(await _productService.GetAll());
+                return Ok(await _discountService.GetAll());
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Create(ProductRequestDTO productRequestDTO)
-        {
-            try
-            {
-                await _productService.Add(productRequestDTO);
-                return Ok("Add successful !");
-            }
-            catch (Exception ex)
+            catch (Exception ex) 
             {
                 return StatusCode(500, ex.Message);
             }
@@ -47,7 +35,22 @@ namespace ECO.WebApi.Controllers
         {
             try
             {
-                return Ok(await _productService.FindById(id));
+                return Ok(await _discountService.FindById(id));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Create(DiscountRequestDTO discountRequestDTO)
+        {
+            try
+            {
+                await _discountService.Add(discountRequestDTO);
+                return NoContent();
             }
             catch (Exception ex)
             {
@@ -56,13 +59,13 @@ namespace ECO.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, ProductRequestDTO productRequestDTO)
+        public async Task<IActionResult> Update(int id, DiscountRequestDTO discountRequestDTO)
         {
             try
             {
-                productRequestDTO.Id = id;
-                await _productService.Update(productRequestDTO);
-                return Ok("Update Successful !");
+                discountRequestDTO.Id = id;
+                await _discountService.Add(discountRequestDTO);
+                return NoContent();
             }
             catch (Exception ex)
             {
@@ -71,17 +74,19 @@ namespace ECO.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Remove(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             try
             {
-                await _productService.Remove(id);
-                return Ok("Delete Successful !");
+                await _discountService.Remove(id);
+                return NoContent();
             }
             catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
             }
         }
+
+
     }
 }

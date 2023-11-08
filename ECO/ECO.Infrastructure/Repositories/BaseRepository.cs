@@ -112,7 +112,9 @@ namespace ECO.Infrastructure.Repositories
                         items = items.Include(includeProperty);
                     }
                 }
-                return await items.SingleOrDefaultAsync(predicate);
+                var rs = await items.SingleOrDefaultAsync(predicate);
+                if (rs == null) throw new Exception("Khong tim thay !!");
+                return rs;
             }
             catch (Exception ex)
             {

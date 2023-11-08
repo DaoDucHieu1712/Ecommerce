@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using ECO.Application.DTOs.Product;
+using ECO.Application.DTOs.Products;
 using ECO.Application.Repositories;
 using ECO.Application.Services;
 using ECO.DataTable;
