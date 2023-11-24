@@ -8,21 +8,25 @@ namespace ECO.Application.DTOs.Others
 {
     public class PagedList<T> : List<T>
     {
-        public int PageIndex { get; set; }
-        public int TotalPages { get; set; }
-
-        public PagedList(List<T> items, int count, int pageIndex, int paeSize)
+        public int CurrentPage { get; private set; }
+        public int TotalPages { get; private set; }
+        public int PageSize { get; private set; }
+        public int TotalCount { get; private set; }
+        public bool HasPrevious => CurrentPage > 1;
+        public bool HasNext => CurrentPage < TotalPages;
+        public PagedList(List<T> items, int count, int pageNumber, int pageSize)
         {
-            pageIndex = pageIndex;
-            TotalPages = (int)Math.Ceiling(count / (double)paeSize);
-            this.AddRange(items);
+            TotalCount = count;
+            PageSize = pageSize;
+            CurrentPage = pageNumber;
+            TotalPages = (int)Math.Ceiling(count / (double)pageSize);
+            AddRange(items);
         }
-
-        public static async Task<PagedList<T>> CreateAsync(List<T> source, int pageIndex, int pageSize)
+        public static async Task<PagedList<T>> ToPagedList(IQueryable<T> source, int pageNumber, int pageSize)
         {
-            var count = source.Count;
-            var items = source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
-            return new PagedList<T>(items, count, pageIndex, pageSize);
+            var count = source.Count();
+            var items = source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+            return new PagedList<T>(items, count, pageNumber, pageSize);
         }
     }
 

@@ -12,6 +12,7 @@ namespace ECO.Application.DTOs.Discount
         [JsonIgnore]
         public int Id { get; set; }
         public string Code { get; set; }
+        public int Quantity { get; set; }
         public int Percent { get; set; }
         public DateTime Expire { get; set; }
         public bool IsPublic { get; set; }

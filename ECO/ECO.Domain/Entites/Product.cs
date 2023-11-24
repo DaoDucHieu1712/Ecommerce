@@ -28,5 +28,6 @@ namespace ECO.Domain.Entites
         public ICollection<Inventory> Inventories { get; set; }
         public ICollection<Rating> Ratings { get; set; }
         public ICollection<OrderDetail> OrderDetails { get; set; }
+        public ICollection<CartItem> CartItems { get; set; }
     }
 }

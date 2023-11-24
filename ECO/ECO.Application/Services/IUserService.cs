@@ -16,5 +16,6 @@ namespace ECO.Application.Services
         public Task Register(RegisterDTO user);
         public Task ChangePassword(ChangePasswordDTO changePasswordDTO);
         public DataResult<AppUser> GetUsersPaging(DataRequest request);
+        public Task ForgetPassword(string email);
     }
 }

@@ -11,9 +11,14 @@ namespace ECO.Domain.Entites
     [Table("Discount")]
     public class Discount : BaseEntity<int>
     {
+        public Discount() {
+            DiscountUsers = new HashSet<DiscountUser>();
+        }
         public string Code { get; set; }
         public int Percent { get; set; }
+        public int Quantity { get; set; }
         public DateTime Expire { get; set; }
         public bool IsPublic { get; set; }
+        public ICollection<DiscountUser> DiscountUsers { get; set;}
     }
 }

@@ -47,6 +47,11 @@ namespace ECO.Infrastructure.Services
             throw new NotImplementedException();
         }
 
+        public Task ForgetPassword(string email)
+        {
+            throw new NotImplementedException();
+        }
+
         public DataResult<AppUser> GetUsersPaging(DataRequest request)
         {
             return _userManager.Users.ToDataResult(request);

@@ -32,6 +32,9 @@ namespace ECO.Infrastructure.Contexts
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<OrderDetail> OrderDetails { get; set; }
         public virtual DbSet<Discount> Discounts { get; set; }
+        public virtual DbSet<Cart> Carts { get; set; }
+        public virtual DbSet<CartItem> CartItems { get; set; }
+        public virtual DbSet<DiscountUser> DiscountUsers { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -49,7 +52,6 @@ namespace ECO.Infrastructure.Contexts
             builder.Entity<Inventory>().HasOne(x => x.Color).WithMany(x => x.Inventories).HasForeignKey(x => x.ColorId).OnDelete(DeleteBehavior.ClientNoAction);
             builder.Entity<Inventory>().HasOne(x => x.Size).WithMany(x => x.Inventories).HasForeignKey(x => x.SizeId).OnDelete(DeleteBehavior.ClientNoAction);
 
-
             builder.Entity<OrderDetail>().HasOne(x => x.Product).WithMany(x => x.OrderDetails).HasForeignKey(x => x.ProductId).OnDelete(DeleteBehavior.ClientNoAction);
             builder.Entity<OrderDetail>().HasOne(x => x.Color).WithMany(x => x.OrderDetails).HasForeignKey(x => x.ColorId).OnDelete(DeleteBehavior.ClientNoAction);
             builder.Entity<OrderDetail>().HasOne(x => x.Size).WithMany(x => x.OrderDetails).HasForeignKey(x => x.SizeId).OnDelete(DeleteBehavior.ClientNoAction);
@@ -57,6 +59,12 @@ namespace ECO.Infrastructure.Contexts
 
             builder.Entity<Rating>().HasOne(x => x.Product).WithMany(x => x.Ratings).HasForeignKey(x => x.ProductId).OnDelete(DeleteBehavior.ClientNoAction);
             builder.Entity<Rating>().HasOne(x => x.Customer).WithMany(x => x.Ratings).HasForeignKey(x => x.CustomerId).OnDelete(DeleteBehavior.ClientNoAction);
+
+            builder.Entity<CartItem>().HasOne(x => x.Product).WithMany(x => x.CartItems).HasForeignKey(x => x.ProductId).OnDelete(DeleteBehavior.ClientNoAction);
+            builder.Entity<CartItem>().HasOne(x => x.Cart).WithMany(x => x.Items).HasForeignKey(x => x.CartId).OnDelete(DeleteBehavior.ClientNoAction);
+
+            builder.Entity<DiscountUser>().HasOne(x => x.Customer).WithMany(x => x.DiscountUsers).HasForeignKey(x => x.CustomerId).OnDelete(DeleteBehavior.ClientNoAction);
+            builder.Entity<DiscountUser>().HasOne(x => x.Discount).WithMany(x => x.DiscountUsers).HasForeignKey(x => x.DiscountId).OnDelete(DeleteBehavior.ClientNoAction);
 
             builder.Entity<AppRole>()
               .HasData(

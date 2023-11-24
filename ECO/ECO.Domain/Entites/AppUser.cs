@@ -14,6 +14,8 @@ namespace ECO.Domain.Entites
 
             Orders = new HashSet<Order>();
             Ratings = new HashSet<Rating>();
+            Carts = new HashSet<Cart>();
+            DiscountUsers = new HashSet<DiscountUser>();
         }
 
         public string FirstName { get; set; }
@@ -22,5 +24,7 @@ namespace ECO.Domain.Entites
         public DateTime BirthDay { get; set; }
         public ICollection<Order> Orders { get; set; }
         public ICollection<Rating> Ratings { get; set; }
+        public ICollection<Cart> Carts { get; set; }
+        public ICollection<DiscountUser> DiscountUsers { get; set; }
     }
 }
