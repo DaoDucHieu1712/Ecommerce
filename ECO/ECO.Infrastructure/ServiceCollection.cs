@@ -2,6 +2,7 @@
 using ECO.Application.Services;
 using ECO.Domain.Entites;
 using ECO.Infrastructure.Contexts;
+using ECO.Infrastructure.MailHelper;
 using ECO.Infrastructure.Repositories;
 using ECO.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -31,6 +32,7 @@ namespace ECO.Infrastructure
             services.AddScoped<IInventoryService, InventoryService>();
             services.AddScoped<IDiscountService, DiscountService>();
             services.AddScoped<IRatingService, RatingService>();
+            services.AddScoped<IEmailService, EmailService>();
             return services;
         }
 

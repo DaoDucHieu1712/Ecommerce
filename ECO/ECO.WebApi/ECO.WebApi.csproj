@@ -21,4 +21,8 @@
     <ProjectReference Include="..\ECO.Infrastructure\ECO.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Storage\Images\" />
+  </ItemGroup>
+
 </Project>

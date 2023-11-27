@@ -35,6 +35,7 @@ namespace ECO.Infrastructure.Contexts
         public virtual DbSet<Cart> Carts { get; set; }
         public virtual DbSet<CartItem> CartItems { get; set; }
         public virtual DbSet<DiscountUser> DiscountUsers { get; set; }
+        public virtual DbSet<Resource> Resources { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

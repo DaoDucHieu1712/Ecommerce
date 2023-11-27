@@ -1,9 +1,11 @@
 using ECO.Infrastructure;
+using ECO.Infrastructure.MailHelper;
 using ECO.WebApi;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
-
+builder.Services.Configure<MailSettingModel>(config.GetSection("MailSettings"));
 builder.Services
     .AddIdentityECO(config)
     .AddAuthentication(config)  

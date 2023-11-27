@@ -3,6 +3,7 @@ using ECO.Application.DTOs.Response;
 using ECO.Application.Services;
 using ECO.DataTable;
 using ECO.Domain.Entites;
+using ECO.Infrastructure.MailHelper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,10 +13,12 @@ namespace ECO.WebApi.Controllers
     {
         private readonly IJwtService _jwtService;
         private readonly IUserService _userService;
-        public UserController(UserManager<AppUser> userManager, IUserService userService, IJwtService jwtService) : base(userManager)
+        private readonly IEmailService _emailService;
+        public UserController(UserManager<AppUser> userManager, IEmailService emailService, IUserService userService, IJwtService jwtService) : base(userManager)
         {
             _userService = userService;
             _jwtService = jwtService;
+            _emailService = emailService;
         }
 
         [HttpPost]
@@ -53,6 +56,26 @@ namespace ECO.WebApi.Controllers
             ServiceResponse response = new();
             response.Onsuccess(_userService.GetUsersPaging(request));
             return response;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SendEmailTest(MailModel mailModel)
+        {
+            try
+            {
+                await _emailService.SendEmailAsync(mailModel);
+                return Ok(new 
+                {
+                    Code = 200,
+                    Message = "OK",
+                    IsSucceed = true,
+                    Data = "Email đã được gửi thành công"
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
     }
 }
