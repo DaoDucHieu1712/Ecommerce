@@ -28,6 +28,20 @@ namespace ECO.WebApi.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Filter([FromQuery]ProductFilterDTO productFilterDTO)
+        {
+            try
+            {
+                var rs = await _productService.GetAllProductFilter(productFilterDTO);
+                return Ok(rs);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create(ProductRequestDTO productRequestDTO)
         {

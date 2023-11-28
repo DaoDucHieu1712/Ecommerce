@@ -29,6 +29,15 @@ instance.interceptors.response.use(
     return response.data;
   },
   async function (error) {
+    const prevRequest = error.config;
+    // anthentication
+    if (error?.response?.status === 401 && !prevRequest.sent) {
+      window.location.href = "/login";
+    }
+
+    if (error?.response?.status === 403 && !prevRequest.sent) {
+      window.location.href = "/access-denied";
+    }
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
     return Promise.reject(error);

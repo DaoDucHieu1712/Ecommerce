@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ECO.Application.DTOs.Others;
 using ECO.Application.DTOs.Products;
 using ECO.Application.Repositories;
 using ECO.Application.Services;
@@ -37,6 +38,66 @@ namespace ECO.Infrastructure.Services
         public async Task<List<ProductResponseDTO>> GetAll()
         {
             return _mapper.Map<List<ProductResponseDTO>>(await _productRepository.FindAll(x => x.Category, x => x.Inventories).ToListAsync());
+        }
+
+        public async Task<EntityFilterDTO<ProductResponseDTO>> GetAllProductFilter(ProductFilterDTO productFilterDTO)
+        {
+            try
+            {
+                var productQuery = _productRepository.FindAll(x => x.Category, x => x.Inventories);
+
+                if (productFilterDTO.SortType != null)
+                {
+                    switch (productFilterDTO.SortType)
+                    {
+                        case "name-asc":
+                            productQuery = productQuery.OrderBy(x => x.Name);
+                            break;
+                        case "name-desc":
+                            productQuery = productQuery.OrderByDescending(x => x.Name);
+                            break;
+                        case "price-asc":
+                            productQuery = productQuery.OrderBy(x => x.Price);
+                            break;
+                        case "price-desc":
+                            productQuery = productQuery.OrderByDescending(x => x.Price);
+                            break;
+                    }
+                }
+
+                if(productFilterDTO.Name != null)
+                {
+                    productQuery = productQuery.Where(x => x.Name.ToLower().Contains(productFilterDTO.Name.ToLower()));
+                }
+
+                if(productFilterDTO.ToPrice != null)
+                {
+                    productQuery = productQuery.Where(x => x.Price >= productFilterDTO.ToPrice);
+                }
+
+                if(productFilterDTO.FromPrice != null)
+                {
+                    productQuery = productQuery.Where(x => x.Price <= productFilterDTO.FromPrice);
+                }
+
+                int pageSize = 7;
+
+                PagedList<Product> _productPaged = await PagedList<Product>.ToPagedList(productQuery, productFilterDTO.PageIndex ?? 1, pageSize);
+
+                return new EntityFilterDTO<ProductResponseDTO>() {
+                    List = _mapper.Map<List<ProductResponseDTO>>(_productPaged),
+                    PageIndex = _productPaged.CurrentPage,
+                    TotalPages = _productPaged.TotalPages,
+                    TotalCount = _productPaged.TotalCount,
+                    HasNext = _productPaged.HasNext,
+                    HasPrevious= _productPaged.HasPrevious,
+                    PageSize = _productPaged.PageSize
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public DataResult<ProductResponseDTO> GetPaging(DataRequest req)
