@@ -3,7 +3,7 @@ import axiosConfig from "./AxiosConfig";
 
 const FileService = {
   async UploadFile(formdata) {
-    const res = await axios({
+    return await axios({
       method: "post",
       url:
         process.env.REACT_APP_BE_BASE_API_URL_HTTPS + "/api/File/UploadImage",
@@ -12,10 +12,9 @@ const FileService = {
         "Content-Type": "multipart/form-data",
       },
     });
-    return res.data;
   },
-  async RemoveFile(path) {
-    const url = "/api/File/DeleteImage/" + path;
+  async RemoveFile(pathId) {
+    const url = "/api/File/DeleteImage/" + pathId;
     return axiosConfig.delete(url);
   },
 };

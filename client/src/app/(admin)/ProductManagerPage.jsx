@@ -11,6 +11,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import ProductService from "../../shared/services/ProductService";
+import AddProduct from "./shared/components/product/AddProduct";
 
 const TABLE_HEAD = [
   "Id",
@@ -20,54 +21,6 @@ const TABLE_HEAD = [
   "Giá tiền",
   "Danh mục",
   "",
-];
-
-const TABLE_ROWS = [
-  {
-    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg",
-    name: "John Michael",
-    email: "john@creative-tim.com",
-    job: "Manager",
-    org: "Organization",
-    online: true,
-    date: "23/04/18",
-  },
-  {
-    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-2.jpg",
-    name: "Alexa Liras",
-    email: "alexa@creative-tim.com",
-    job: "Programator",
-    org: "Developer",
-    online: false,
-    date: "23/04/18",
-  },
-  {
-    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-1.jpg",
-    name: "Laurent Perrier",
-    email: "laurent@creative-tim.com",
-    job: "Executive",
-    org: "Projects",
-    online: false,
-    date: "19/09/17",
-  },
-  {
-    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-4.jpg",
-    name: "Michael Levi",
-    email: "michael@creative-tim.com",
-    job: "Programator",
-    org: "Developer",
-    online: true,
-    date: "24/12/08",
-  },
-  {
-    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-5.jpg",
-    name: "Richard Gran",
-    email: "richard@creative-tim.com",
-    job: "Manager",
-    org: "Executive",
-    online: false,
-    date: "04/10/21",
-  },
 ];
 
 const ProductManagerPage = () => {
@@ -112,9 +65,7 @@ const ProductManagerPage = () => {
                 </Typography>
               </div>
               <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-                <Button className="flex items-center gap-3" size="sm">
-                  thêm mới
-                </Button>
+                <AddProduct onReload={productQuery.refetch} />
               </div>
             </div>
             <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
@@ -141,13 +92,7 @@ const ProductManagerPage = () => {
                         color="blue-gray"
                         className="flex items-center justify-between gap-2 font-normal leading-none opacity-70"
                       >
-                        {head}{" "}
-                        {/* {index !== TABLE_HEAD.length - 1 && (
-                            <ChevronUpDownIcon
-                              strokeWidth={2}
-                              className="h-4 w-4"
-                            />
-                          )} */}
+                        {head}
                       </Typography>
                     </th>
                   ))}
@@ -155,7 +100,7 @@ const ProductManagerPage = () => {
               </thead>
               <tbody>
                 {productQuery.data?.list?.map((item, index) => {
-                  const isLast = index === TABLE_ROWS.length - 1;
+                  const isLast = index === productQuery.data?.list?.length - 1;
                   const classes = isLast
                     ? "p-4"
                     : "p-4 border-b border-blue-gray-50";

@@ -1,4 +1,5 @@
-﻿using ECO.Infrastructure.Contexts;
+﻿using ECO.Domain.Entites;
+using ECO.Infrastructure.Contexts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,12 +12,27 @@ namespace ECO.WebApi.Controllers
     public class FileController : ControllerBase
     {
 
-        [HttpDelete("{url}")]
-        public async Task<IActionResult> DeleteImage(string url)
+        private readonly ECOContext _context;
+
+        public FileController(ECOContext context)
+        {
+            _context = context;
+        }
+
+        [HttpDelete("{pathId}")]
+        public async Task<IActionResult> DeleteImage(string pathId)
         {
             try
             {
-                var path = Path.GetFullPath(url);
+                var resource = await _context.Resources.Where(x => x.PathId== pathId).FirstOrDefaultAsync();
+                if(resource == null)
+                {
+                    return StatusCode(500, "Không tìm thấy ảnh !!!");
+                }
+                _context.Resources.Remove(resource);
+                await _context.SaveChangesAsync();
+
+                var path = Path.GetFullPath(resource.Url);
                 FileInfo fileInfo = new FileInfo(path);
 
                 if (fileInfo.Exists)
@@ -52,7 +68,17 @@ namespace ECO.WebApi.Controllers
                     {
                         await fileImage.CopyToAsync(stream);
                     }
-                    return Ok(filePath);
+
+                    var rs = new Resource
+                    {
+                        PathId= PathId,
+                        Url= filePath,
+                        FileName= fileName,
+                    };
+
+                    await _context.Resources.AddAsync(rs);
+                    await _context.SaveChangesAsync();
+                    return Ok(await _context.Resources.FirstOrDefaultAsync(x=> x.Id == rs.Id));
                 }
                 else
                 {
