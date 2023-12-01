@@ -85,5 +85,32 @@ namespace ECO.WebApi.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAllByProductId(int id)
+        {
+            try
+            {
+                return Ok(await _inventoryService.GetAllByProductId(id));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> AddQuantity(int id, int quantity)
+        {
+            try
+            {
+                await _inventoryService.AddQuantityInventory(id, quantity);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }

@@ -113,7 +113,6 @@ namespace ECO.Infrastructure.Repositories
                     }
                 }
                 var rs = await items.SingleOrDefaultAsync(predicate);
-                if (rs == null) throw new Exception("Khong tim thay !!");
                 return rs;
             }
             catch (Exception ex)

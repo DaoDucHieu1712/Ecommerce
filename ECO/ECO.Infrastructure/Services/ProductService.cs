@@ -62,6 +62,9 @@ namespace ECO.Infrastructure.Services
                         case "price-desc":
                             productQuery = productQuery.OrderByDescending(x => x.Price);
                             break;
+                        default:
+                            productQuery = productQuery.OrderByDescending(x => x.CreatedAt);
+                            break;
                     }
                 }
 
@@ -80,7 +83,12 @@ namespace ECO.Infrastructure.Services
                     productQuery = productQuery.Where(x => x.Price <= productFilterDTO.FromPrice);
                 }
 
-                int pageSize = 7;
+                if(productFilterDTO.CategoryId != null)
+                {
+                    productQuery = productQuery.Where(x => x.CategoryId == productFilterDTO.CategoryId);
+                }
+
+                int pageSize = 5;
 
                 PagedList<Product> _productPaged = await PagedList<Product>.ToPagedList(productQuery, productFilterDTO.PageIndex ?? 1, pageSize);
 
@@ -112,7 +120,7 @@ namespace ECO.Infrastructure.Services
 
         public async Task Update(ProductRequestDTO entity)
         {
-            await _productRepository.Update(_mapper.Map<Product>(entity));
+            await _productRepository.Update(_mapper.Map<Product>(entity), "CreatedAt");
         }
     }
 }

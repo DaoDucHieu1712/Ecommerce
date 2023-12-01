@@ -10,6 +10,7 @@ namespace ECO.Application.Services
 {
     public interface IInventoryService : IBaseService<InventoryResponseDTO, InventoryRequestDTO, int>
     {
-        
+        Task<List<InventoryResponseDTO>> GetAllByProductId(int productId);
+        Task AddQuantityInventory(int id, int quantity);
     }
 }

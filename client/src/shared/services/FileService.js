@@ -1,12 +1,10 @@
 import axios from "axios";
-import axiosConfig from "./AxiosConfig";
 
 const FileService = {
   async UploadFile(formdata) {
     return await axios({
       method: "post",
-      url:
-        process.env.REACT_APP_BE_BASE_API_URL_HTTPS + "/api/File/UploadImage",
+      url: "http://103.184.112.229:1000/api/File/UploadImage",
       data: formdata,
       headers: {
         "Content-Type": "multipart/form-data",
@@ -14,8 +12,14 @@ const FileService = {
     });
   },
   async RemoveFile(pathId) {
-    const url = "/api/File/DeleteImage/" + pathId;
-    return axiosConfig.delete(url);
+    // const url = "/api/File/DeleteImage/" + pathId;
+    return await axios({
+      method: "delete",
+      url: `http://103.184.112.229:1000/api/File/UploadImage/${pathId}`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   },
 };
 

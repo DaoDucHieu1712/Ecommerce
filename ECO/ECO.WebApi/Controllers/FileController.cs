@@ -61,7 +61,7 @@ namespace ECO.WebApi.Controllers
                 string type_file = fileName.Split(".")[1];
                 string PathId = Guid.NewGuid().ToString();
                 string name_file = $"{PathId}.{type_file}";
-                string filePath = Path.Combine(Directory.GetCurrentDirectory(), "Storage", "Images", name_file);
+                string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "images", name_file);
                 if (fileImage.Length > 0 && fileImage.Length <= 4000000)
                 {
                     using (var stream = new FileStream(filePath, FileMode.Create))

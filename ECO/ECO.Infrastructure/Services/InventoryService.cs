@@ -26,7 +26,25 @@ namespace ECO.Infrastructure.Services
 
         public async Task Add(InventoryRequestDTO entity)
         {
-            await _inventoryRepository.Add(_mapper.Map<Inventory>(entity));
+            var _invetory = await _inventoryRepository
+                .FindSingle(x => x.ColorId == entity.ColorId
+                && x.SizeId == entity.SizeId
+                && x.ProductId == entity.ProductId);
+            if (_invetory == null)
+            {
+                await _inventoryRepository.Add(_mapper.Map<Inventory>(entity));
+            }
+            else
+            {
+                throw new Exception("Tồn kho này đã tồn tại !!");
+            }
+        }
+
+        public async Task AddQuantityInventory(int id, int quantity)
+        {
+            var inventory = await _inventoryRepository.FindSingle(x => x.Id == id);
+            inventory.Quantity = inventory.Quantity + quantity;
+            await _inventoryRepository.Update(inventory, "CreatedAt");
         }
 
         public async Task<InventoryResponseDTO> FindById(int id)
@@ -36,7 +54,12 @@ namespace ECO.Infrastructure.Services
 
         public async Task<List<InventoryResponseDTO>> GetAll()
         {
-            return _mapper.Map<List<InventoryResponseDTO>>(await _inventoryRepository.FindAll(x => x.Color, x=> x.Product, x => x.Size).ToListAsync());
+            return _mapper.Map<List<InventoryResponseDTO>>(await _inventoryRepository.FindAll(x => x.Color, x => x.Product, x => x.Size).ToListAsync());
+        }
+
+        public async Task<List<InventoryResponseDTO>> GetAllByProductId(int productId)
+        {
+            return _mapper.Map<List<InventoryResponseDTO>>(await _inventoryRepository.FindAll(x => x.ProductId == productId, x => x.Color, x => x.Product, x => x.Size).ToListAsync());
         }
 
         public DataResult<InventoryResponseDTO> GetPaging(DataRequest req)
@@ -51,7 +74,7 @@ namespace ECO.Infrastructure.Services
 
         public async Task Update(InventoryRequestDTO entity)
         {
-           await _inventoryRepository.Update(_mapper.Map<Inventory>(entity), "CreatedAt");
+            await _inventoryRepository.Update(_mapper.Map<Inventory>(entity), "CreatedAt");
         }
     }
 }
