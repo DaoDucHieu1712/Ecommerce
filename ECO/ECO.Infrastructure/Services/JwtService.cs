@@ -33,6 +33,9 @@ namespace ECO.Infrastructure.Services
             var key = Encoding.ASCII.GetBytes(_configuration["Authentication:Jwt:Secret"]);
 
             var expires = DateTime.UtcNow.AddDays(7);
+
+            var roles = await _userManager.GetRolesAsync(user);
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]
@@ -45,7 +48,8 @@ namespace ECO.Infrastructure.Services
                     new Claim(ClaimTypes.Surname, user.FirstName),
                     new Claim(ClaimTypes.GivenName, user.LastName),
                     new Claim(ClaimTypes.NameIdentifier, user.UserName),
-                    new Claim(ClaimTypes.Email, user.Email)
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.Role, roles[0])
                 }),
 
                 Expires = expires,
@@ -54,7 +58,7 @@ namespace ECO.Infrastructure.Services
                 Issuer = _configuration["Authentication:Jwt:Issuer"],
                 Audience = _configuration["Authentication:Jwt:Audience"]
             };
-            var roles = await _userManager.GetRolesAsync(user);
+            
             var securityToken = tokenHandler.CreateToken(tokenDescriptor);
             var token = tokenHandler.WriteToken(securityToken);
 

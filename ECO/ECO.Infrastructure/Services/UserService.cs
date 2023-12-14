@@ -1,4 +1,5 @@
-﻿using ECO.Application.DTOs.Auth;
+﻿using AutoMapper;
+using ECO.Application.DTOs.Auth;
 using ECO.Application.Services;
 using ECO.DataTable;
 using ECO.Domain.Entites;
@@ -18,12 +19,14 @@ namespace ECO.Infrastructure.Services
         protected readonly UserManager<AppUser> _userManager;
         protected readonly IJwtService _jwtService;
         protected readonly IConfiguration _configuration;
+        private readonly IMapper _mapper;
 
-        public UserService(UserManager<AppUser> userManager, IJwtService jwtService, IConfiguration configuration)
+        public UserService(UserManager<AppUser> userManager, IJwtService jwtService, IConfiguration configuration, IMapper mapper)
         {
             _userManager = userManager;
             _jwtService = jwtService;
             _configuration = configuration;
+            _mapper = mapper;
         }
 
         public async Task<AppUser> Authenicate(string username, string password)
@@ -52,6 +55,16 @@ namespace ECO.Infrastructure.Services
             throw new NotImplementedException();
         }
 
+        public async Task<UserDTO> GetCurrentUser(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if(user == null)
+            {
+                throw new Exception("Không tìm thấy người dùng nào !");
+            }
+            return _mapper.Map<UserDTO>(user);
+        }
+
         public DataResult<AppUser> GetUsersPaging(DataRequest request)
         {
             return _userManager.Users.ToDataResult(request);
@@ -70,9 +83,7 @@ namespace ECO.Infrastructure.Services
 
             return new UserToken()
             {
-                UserId = user.Id,
-                Roles = roles,
-                Email = email,
+                UserName = user.UserName,
                 Token = await _jwtService.GenerateUserTokenAsync(user),
             };
         }
@@ -83,9 +94,10 @@ namespace ECO.Infrastructure.Services
                 {
                     FirstName = user.FirstName,
                     LastName = user.LastName,
-                    UserName = user.Email,
+                    UserName = user.Email.Split('@')[0],
                     BirthDay = user.BirthDay,
                     Gender = user.Gender,
+                    PhoneNumber = user.PhoneNumber,
                     Email = user.Email
                 };
                 var _user = await _userManager.FindByEmailAsync(user.Email);

@@ -112,5 +112,21 @@ namespace ECO.WebApi.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> DesccreaseQuantityInventory(int id, int quantity)
+        {
+            try
+            {
+                await _inventoryService.DescreaseQuantityInventory(id, quantity);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+
     }
 }

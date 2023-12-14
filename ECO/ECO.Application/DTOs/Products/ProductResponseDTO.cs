@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ECO.Application.DTOs.Inventory;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,6 @@ namespace ECO.Application.DTOs.Products
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public int Quantity { get; set; }
-        
+        public List<InventoryResponseDTO> Inventories { get; set; }
     }
 }

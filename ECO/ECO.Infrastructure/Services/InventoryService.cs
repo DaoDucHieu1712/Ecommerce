@@ -47,6 +47,13 @@ namespace ECO.Infrastructure.Services
             await _inventoryRepository.Update(inventory, "CreatedAt");
         }
 
+        public async Task DescreaseQuantityInventory(int id, int quantity)
+        {
+            var inventory = await _inventoryRepository.FindSingle(x => x.Id == id);
+            inventory.Quantity = inventory.Quantity - quantity;
+            await _inventoryRepository.Update(inventory, "CreatedAt");
+        }
+
         public async Task<InventoryResponseDTO> FindById(int id)
         {
             return _mapper.Map<InventoryResponseDTO>(await _inventoryRepository.FindSingle(x => x.Id == id));

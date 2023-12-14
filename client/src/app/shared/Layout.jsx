@@ -1,15 +1,12 @@
 import React from "react";
 import { Link, NavLink, Outlet } from "react-router-dom";
 import Logo from "../../assets/DegreyLogo.webp";
-
+import CookieService from "../../shared/helpers/CookieHelper";
+import UserNav from "./UserNav";
 const MenuLink = [
   {
     name: "Trang chủ",
     path: "/",
-  },
-  {
-    name: "Sản phẩm",
-    path: "/store",
   },
   {
     name: "Store",
@@ -56,13 +53,19 @@ const Layout = () => {
                   } py-6`
                 }
               >
-                Giỏ hàng
+                Giỏ hàng(9)
               </NavLink>
             </div>
             <div className="flex justify-end items-center gap-x-3">
-              <Link to="/login">Đăng nhập</Link>
-              <span>/</span>
-              <Link to="/register">Đăng ký</Link>
+              {CookieService.getCookie(process.env.REACT_APP_ECO_TOKEN) ? (
+                <UserNav />
+              ) : (
+                <>
+                  <Link to="/login">Đăng nhập</Link>
+                  <span>/</span>
+                  <Link to="/register">Đăng ký</Link>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -88,11 +91,8 @@ const Layout = () => {
             <div className="flex flex-col gap-y-5">
               <h1 className="font-bold">Địa chỉ</h1>
               <div className="flex flex-col gap-y-2">
-                <h1 className="font-bold">-Sài gòn:</h1>
-                <p>
-                  43 Huỳnh Văn Bánh P.17 Q.Phú Nhuận 1041 Luỹ Bán Bích P.Tân
-                  Thành Q.Tân Phú
-                </p>
+                <h1 className="font-bold">-Hà Nội:</h1>
+                <p>Ở đâu còn lâu mới nói :))</p>
               </div>
               <p>
                 <span className="font-bold">Điện thoại: </span> 0916058692

@@ -4,6 +4,7 @@ using ECO.Application.Services;
 using ECO.DataTable;
 using ECO.Domain.Entites;
 using ECO.Infrastructure.MailHelper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -71,6 +72,21 @@ namespace ECO.WebApi.Controllers
                     IsSucceed = true,
                     Data = "Email đã được gửi thành công"
                 });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> GetCurrentUser()
+        {
+            try
+            {
+                var userId = User?.Identity?.Name ?? "";
+                return Ok(await _userService.GetCurrentUser(userId));
             }
             catch (Exception ex)
             {

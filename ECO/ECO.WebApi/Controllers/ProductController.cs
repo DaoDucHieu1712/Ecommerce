@@ -1,4 +1,5 @@
 ﻿using ECO.Application.DTOs.Products;
+using ECO.Application.DTOs.Response;
 using ECO.Application.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,20 @@ namespace ECO.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Filter([FromQuery]ProductFilterDTO productFilterDTO)
+        public async Task<IActionResult> Shop([FromQuery]ProductShopDTO productShopDTO)
+        {
+            try
+            {
+                return Ok(await _productService.GetShop(productShopDTO));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Filter([FromQuery] ProductFilterDTO productFilterDTO)
         {
             try
             {
@@ -49,6 +63,19 @@ namespace ECO.WebApi.Controllers
             {
                 await _productService.Add(productRequestDTO);
                 return Ok("Add successful !");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetProductRecommend(int id)
+        {
+            try
+            {
+                return Ok(await _productService.GetProductRecommend(id));
             }
             catch (Exception ex)
             {

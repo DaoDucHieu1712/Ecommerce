@@ -12,5 +12,7 @@ namespace ECO.Application.Services
     {
         Task<List<InventoryResponseDTO>> GetAllByProductId(int productId);
         Task AddQuantityInventory(int id, int quantity);
+        Task DescreaseQuantityInventory(int id, int quantity);
+       
     }
 }

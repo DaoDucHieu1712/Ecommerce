@@ -32,7 +32,9 @@ namespace ECO.Infrastructure.Services
 
         public async Task<CategoryResponseDTO> FindById(int id)
         {
-            return _mapper.Map<CategoryResponseDTO>(await _categoryRepository.FindSingle(x => x.Id == id));
+            var c = await _categoryRepository.FindSingle(x => x.Id == id);
+            if (c == null) throw new Exception("Không tìm thấy danh mục nào !!");
+            return _mapper.Map<CategoryResponseDTO>(c);
         }
 
         public async Task<List<CategoryResponseDTO>> GetAll()

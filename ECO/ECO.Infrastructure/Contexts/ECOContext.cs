@@ -63,6 +63,7 @@ namespace ECO.Infrastructure.Contexts
 
             builder.Entity<CartItem>().HasOne(x => x.Product).WithMany(x => x.CartItems).HasForeignKey(x => x.ProductId).OnDelete(DeleteBehavior.ClientNoAction);
             builder.Entity<CartItem>().HasOne(x => x.Cart).WithMany(x => x.Items).HasForeignKey(x => x.CartId).OnDelete(DeleteBehavior.ClientNoAction);
+            builder.Entity<CartItem>().HasOne(x => x.Inventory).WithMany(x => x.CartItems).HasForeignKey(x => x.InventoryId).OnDelete(DeleteBehavior.ClientNoAction);
 
             builder.Entity<DiscountUser>().HasOne(x => x.Customer).WithMany(x => x.DiscountUsers).HasForeignKey(x => x.CustomerId).OnDelete(DeleteBehavior.ClientNoAction);
             builder.Entity<DiscountUser>().HasOne(x => x.Discount).WithMany(x => x.DiscountUsers).HasForeignKey(x => x.DiscountId).OnDelete(DeleteBehavior.ClientNoAction);

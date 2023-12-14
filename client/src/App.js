@@ -2,6 +2,9 @@ import { lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 import Layout from "./app/shared/Layout";
 import DashboardLayout from "./app/shared/DashboardLayout";
+import LoginPage from "./app/(public)/LoginPage";
+import RegisterPage from "./app/(public)/RegisterPage";
+import ProductDetail from "./app/(public)/ProductDetail";
 const NotFoundPage = lazy(() => import("./app/(public)/NotFoundPage"));
 const AccessDeniedPage = lazy(() => import("./app/(public)/AccessDeniedPage"));
 const HomePage = lazy(() => import("./app/(public)/HomePage"));
@@ -14,12 +17,19 @@ const ProductManagerPage = lazy(() =>
 const InventoryManagerPage = lazy(() =>
   import("./app/(admin)/InventoryManagerPage")
 );
+const ShopPage = lazy(() => import("./app/(public)/ShopPage"));
+
 function App() {
   return (
     <>
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/shop" element={<ShopPage />} />
+          <Route path="/shop/product/:id" element={<ProductDetail />} />
+
         </Route>
         <Route element={<DashboardLayout />}>
           <Route path="/admin/category" element={<CategoryManagerPage />} />
@@ -31,19 +41,6 @@ function App() {
         </Route>
         <Route path="*" element={<NotFoundPage />} />
         <Route path="/access-denied" element={<AccessDeniedPage />} />
-        <Route
-          path="/upload-img"
-          element={
-            <>
-              <img
-                src={
-                  "C:\\Users\\ADMIN\\OneDrive\\Desktop\\Git\\Ecommerce\\ECO\\ECO.WebApi\\wwwroot\\uploads\\images\\eb7ccf0a-8a02-4ea5-a05f-3c0a13d06f6d.jpg"
-                }
-                alt="anh"
-              />
-            </>
-          }
-        />
       </Routes>
     </>
   );

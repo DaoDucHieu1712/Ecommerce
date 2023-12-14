@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ECO.Application.DTOs.Auth;
 using ECO.Application.DTOs.Category;
 using ECO.Application.DTOs.Color;
 using ECO.Application.DTOs.Discount;
@@ -19,6 +20,7 @@ namespace ECO.Infrastructure.Mappers
     {
         public MapperProfile() {
 
+            UserMapper();
             CategoryMapper();
             ProductMapper();
             ColorMapper();
@@ -26,6 +28,11 @@ namespace ECO.Infrastructure.Mappers
             InventoryMapper();
             DiscountMapper();
             RatingMapper();
+        }
+
+        public void UserMapper()
+        {
+            CreateMap<AppUser, UserDTO>().ReverseMap();
         }
 
         public void CategoryMapper()
