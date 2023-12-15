@@ -112,36 +112,46 @@ const DashboardLayout = () => {
               </ListItem>
               <AccordionBody className="py-1">
                 <List className="p-0">
-                  <ListItem>
-                    <ListItemPrefix>
-                      <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                    </ListItemPrefix>
-                    Quản lý danh mục
-                  </ListItem>
-                  <ListItem>
-                    <ListItemPrefix>
-                      <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                    </ListItemPrefix>
-                    Quản lý sản phẩm
-                  </ListItem>
-                  <ListItem>
-                    <ListItemPrefix>
-                      <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                    </ListItemPrefix>
-                    Quản lý tồn kho
-                  </ListItem>
-                  <ListItem>
-                    <ListItemPrefix>
-                      <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                    </ListItemPrefix>
-                    Quản lý đơn hàng
-                  </ListItem>
-                  <ListItem>
-                    <ListItemPrefix>
-                      <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                    </ListItemPrefix>
-                    Quản lý người dùng
-                  </ListItem>
+                  <Link to="/admin/category">
+                    <ListItem>
+                      <ListItemPrefix>
+                        <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                      </ListItemPrefix>
+                      Quản lý danh mục
+                    </ListItem>
+                  </Link>
+                  <Link to="/admin/product">
+                    <ListItem>
+                      <ListItemPrefix>
+                        <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                      </ListItemPrefix>
+                      Quản lý sản phẩm
+                    </ListItem>
+                  </Link>
+                  <Link to="/admin/discount">
+                    <ListItem>
+                      <ListItemPrefix>
+                        <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                      </ListItemPrefix>
+                      Quản lý mã giảm giá
+                    </ListItem>
+                  </Link>
+                  <Link to="/admin/order">
+                    <ListItem>
+                      <ListItemPrefix>
+                        <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                      </ListItemPrefix>
+                      Quản lý đơn hàng
+                    </ListItem>
+                  </Link>
+                  <Link to="/admin/user">
+                    <ListItem>
+                      <ListItemPrefix>
+                        <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                      </ListItemPrefix>
+                      Quản lý người dùng
+                    </ListItem>
+                  </Link>
                 </List>
               </AccordionBody>
             </Accordion>

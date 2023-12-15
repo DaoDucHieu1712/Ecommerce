@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ECO.Application.DTOs.Auth;
+using ECO.Application.DTOs.Carts;
 using ECO.Application.DTOs.Category;
 using ECO.Application.DTOs.Color;
 using ECO.Application.DTOs.Discount;
@@ -18,7 +19,8 @@ namespace ECO.Infrastructure.Mappers
 {
     public class MapperProfile : Profile
     {
-        public MapperProfile() {
+        public MapperProfile()
+        {
 
             UserMapper();
             CategoryMapper();
@@ -28,11 +30,13 @@ namespace ECO.Infrastructure.Mappers
             InventoryMapper();
             DiscountMapper();
             RatingMapper();
+            CartMapper();
         }
 
         public void UserMapper()
         {
-            CreateMap<AppUser, UserDTO>().ReverseMap();
+            CreateMap<AppUser, UserDTO>()
+                .ReverseMap();
         }
 
         public void CategoryMapper()
@@ -68,8 +72,12 @@ namespace ECO.Infrastructure.Mappers
         {
             CreateMap<Inventory, InventoryResponseDTO>()
                 .ForMember(x => x.InventoryName,
-                opt => opt.MapFrom(src => src.Size.SizeName + "-" + src.Color.ColorName))
-                .ForMember(x => x.ProductName, 
+                opt => opt.MapFrom(src =>
+        (src.Size == null && src.Color == null) ? "Unknown" :
+        (src.Size == null) ? src.Color.ColorName :
+        (src.Color == null) ? src.Size.SizeName :
+        $"{src.Size.SizeName}-{src.Color.ColorName}"))
+                .ForMember(x => x.ProductName,
                 opt => opt.MapFrom(src => src.Product.Name))
                  .ForMember(x => x.SizeName,
                 opt => opt.MapFrom(src => src.Size.SizeName))
@@ -89,6 +97,20 @@ namespace ECO.Infrastructure.Mappers
         {
             CreateMap<Rating, RatingResponseDTO>().ReverseMap();
             CreateMap<Rating, RatingRequestDTO>().ReverseMap();
+        }
+
+        public void CartMapper()
+        {
+            CreateMap<Cart, CartResponseDTO>()
+                .ForMember(x => x.Quantity, opt => opt.MapFrom(src => src.Items.Count))
+                .ForMember(x => x.TotalPrice, opt => opt.MapFrom(src => src.Items.Any() ? src.Items.Average(item => item.UnitPrice) : 0))
+                .ReverseMap();
+            CreateMap<Cart, CartRequestDTO>().ReverseMap();
+            CreateMap<CartItem, CartItemResponseDTO>()
+                .ForMember(x => x.ProductName, opt => opt.MapFrom(src => src.Product.Name))
+                .ForMember(x => x.ProductImage, opt => opt.MapFrom(src => src.Product.ImageUrl))
+                .ReverseMap();
+            CreateMap<CartItem, CartItemRequestDTO>().ReverseMap();
         }
     }
 }

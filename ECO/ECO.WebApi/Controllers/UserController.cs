@@ -1,4 +1,5 @@
 ﻿using ECO.Application.DTOs.Auth;
+using ECO.Application.DTOs.Carts;
 using ECO.Application.DTOs.Response;
 using ECO.Application.Services;
 using ECO.DataTable;
@@ -15,11 +16,13 @@ namespace ECO.WebApi.Controllers
         private readonly IJwtService _jwtService;
         private readonly IUserService _userService;
         private readonly IEmailService _emailService;
-        public UserController(UserManager<AppUser> userManager, IEmailService emailService, IUserService userService, IJwtService jwtService) : base(userManager)
+        private readonly ICartService _cartService;
+        public UserController(UserManager<AppUser> userManager,  IEmailService emailService, IUserService userService, IJwtService jwtService, ICartService cartService) : base(userManager)
         {
             _userService = userService;
             _jwtService = jwtService;
             _emailService = emailService;
+            _cartService = cartService;
         }
 
         [HttpPost]
@@ -42,6 +45,13 @@ namespace ECO.WebApi.Controllers
             try
             {
                 await _userService.Register(registerDTO);
+                var user = await _userService.GetUserByEmail(registerDTO.Email);
+                await _cartService.Add(new CartRequestDTO
+                {
+                    CustomerId = user.Id,
+                    Quantity = 0,
+                    TotalPrice = 0,
+                });
                 return Ok("Đăng ký thành công !!");
             }
             catch (Exception ex)

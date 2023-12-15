@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ECO.Application.DTOs.Auth;
+using ECO.Application.Repositories;
 using ECO.Application.Services;
 using ECO.DataTable;
 using ECO.Domain.Entites;
@@ -18,6 +19,7 @@ namespace ECO.Infrastructure.Services
 
         protected readonly UserManager<AppUser> _userManager;
         protected readonly IJwtService _jwtService;
+        private readonly ICartRepository _cartRepository;
         protected readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
 
@@ -58,7 +60,7 @@ namespace ECO.Infrastructure.Services
         public async Task<UserDTO> GetCurrentUser(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
-            if(user == null)
+            if (user == null)
             {
                 throw new Exception("Không tìm thấy người dùng nào !");
             }
@@ -90,23 +92,28 @@ namespace ECO.Infrastructure.Services
 
         public async Task Register(RegisterDTO user)
         {
-                var NewUser = new AppUser()
-                {
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    UserName = user.Email.Split('@')[0],
-                    BirthDay = user.BirthDay,
-                    Gender = user.Gender,
-                    PhoneNumber = user.PhoneNumber,
-                    Email = user.Email
-                };
-                var _user = await _userManager.FindByEmailAsync(user.Email);
-                if (_user != null) throw new Exception("Email đã tồn tại !!");
-                if (user.Password != user.ConfirmPassword) throw new Exception("Hãy kiểm tra lại mật khẩu !");
-                var result = await _userManager.CreateAsync(NewUser, user.Password);
-                if (!result.Succeeded) throw new Exception("Đăng ký thất bại !!");
-                var roleRs = await _userManager.AddToRoleAsync(NewUser, "Customer");
-                if (!roleRs.Succeeded) throw new Exception("Not Add To Role");
+            var NewUser = new AppUser()
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                UserName = user.Email.Split('@')[0],
+                BirthDay = user.BirthDay,
+                Gender = user.Gender,
+                PhoneNumber = user.PhoneNumber,
+                Email = user.Email
+            };
+            var _user = await _userManager.FindByEmailAsync(user.Email);
+            if (_user != null) throw new Exception("Email đã tồn tại !!");
+            if (user.Password != user.ConfirmPassword) throw new Exception("Hãy kiểm tra lại mật khẩu !");
+            var result = await _userManager.CreateAsync(NewUser, user.Password);
+            if (!result.Succeeded) throw new Exception("Đăng ký thất bại !!");
+            var roleRs = await _userManager.AddToRoleAsync(NewUser, "Customer");
+            if (!roleRs.Succeeded) throw new Exception("Not Add To Role");
+        }
+
+        public async Task<UserDTO> GetUserByEmail(string email)
+        {
+            return _mapper.Map<UserDTO>(await _userManager.FindByEmailAsync(email));
         }
     }
 }

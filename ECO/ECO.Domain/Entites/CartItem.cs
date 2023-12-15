@@ -13,6 +13,7 @@ namespace ECO.Domain.Entites
     {
         public int CartId { get; set; }
         public int ProductId { get; set; }
+        public string Type { get; set; }
         public int InventoryId { get; set; }
         public int Quantity { get; set; }
         public decimal UnitPrice { get; set; }
