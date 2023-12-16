@@ -4,6 +4,7 @@ using ECO.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECO.Infrastructure.Migrations
 {
     [DbContext(typeof(ECOContext))]
-    partial class ECOContextModelSnapshot : ModelSnapshot
+    [Migration("20231216151023_payment")]
+    partial class payment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -381,7 +383,6 @@ namespace ECO.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("PaymentId")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("PhoneNumber")
@@ -402,8 +403,6 @@ namespace ECO.Infrastructure.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.HasIndex("PaymentId");
-
                     b.ToTable("Order");
                 });
 
@@ -415,11 +414,11 @@ namespace ECO.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("ColorId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("InventoryId")
-                        .HasColumnType("int");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -433,6 +432,9 @@ namespace ECO.Infrastructure.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<int>("SizeId")
+                        .HasColumnType("int");
+
                     b.Property<int>("UnitPrice")
                         .HasColumnType("int");
 
@@ -441,11 +443,13 @@ namespace ECO.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("InventoryId");
+                    b.HasIndex("ColorId");
 
                     b.HasIndex("OrderId");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("SizeId");
 
                     b.ToTable("OrderDetail");
                 });
@@ -836,24 +840,24 @@ namespace ECO.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "284297f0-5155-490b-948b-43902926a950",
-                            ConcurrencyStamp = "0195fe33-5821-45b1-9ea7-f409021e1bf2",
+                            Id = "1a27cb5a-2039-4fb0-94d5-acd899f26bd5",
+                            ConcurrencyStamp = "4cc8fef5-d357-4501-a313-4522ea914cd0",
                             Name = "Admin",
                             NormalizedName = "ADMIN",
                             Description = "Admin"
                         },
                         new
                         {
-                            Id = "a349b50f-5292-43b1-b76b-f27f9c365a40",
-                            ConcurrencyStamp = "123963f9-e252-40fa-afb5-2d22475daab1",
+                            Id = "5635140c-f6b5-4d70-bd9e-94d9d8e9a0f7",
+                            ConcurrencyStamp = "ce9e7462-19cb-4ec1-9a61-0f9e43894bc8",
                             Name = "Staff",
                             NormalizedName = "STAFF",
                             Description = "Staff"
                         },
                         new
                         {
-                            Id = "daac049f-3367-4ae8-8583-ce64fa75cf1c",
-                            ConcurrencyStamp = "7aa5760a-4c04-483e-b4f1-50941b27d73a",
+                            Id = "12187cf1-e65d-4d5c-9e91-99e229563291",
+                            ConcurrencyStamp = "138e84f1-3af7-426d-8273-379d91386104",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER",
                             Description = "Customer"
@@ -950,22 +954,14 @@ namespace ECO.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ECO.Domain.Entites.Payment", "Payment")
-                        .WithMany()
-                        .HasForeignKey("PaymentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Customer");
-
-                    b.Navigation("Payment");
                 });
 
             modelBuilder.Entity("ECO.Domain.Entites.OrderDetail", b =>
                 {
-                    b.HasOne("ECO.Domain.Entites.Inventory", "Inventory")
+                    b.HasOne("ECO.Domain.Entites.Color", "Color")
                         .WithMany("OrderDetails")
-                        .HasForeignKey("InventoryId")
+                        .HasForeignKey("ColorId")
                         .OnDelete(DeleteBehavior.ClientNoAction)
                         .IsRequired();
 
@@ -981,11 +977,19 @@ namespace ECO.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.ClientNoAction)
                         .IsRequired();
 
-                    b.Navigation("Inventory");
+                    b.HasOne("ECO.Domain.Entites.Size", "Size")
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("SizeId")
+                        .OnDelete(DeleteBehavior.ClientNoAction)
+                        .IsRequired();
+
+                    b.Navigation("Color");
 
                     b.Navigation("Order");
 
                     b.Navigation("Product");
+
+                    b.Navigation("Size");
                 });
 
             modelBuilder.Entity("ECO.Domain.Entites.Product", b =>
@@ -1093,6 +1097,8 @@ namespace ECO.Infrastructure.Migrations
             modelBuilder.Entity("ECO.Domain.Entites.Color", b =>
                 {
                     b.Navigation("Inventories");
+
+                    b.Navigation("OrderDetails");
                 });
 
             modelBuilder.Entity("ECO.Domain.Entites.Discount", b =>
@@ -1103,8 +1109,6 @@ namespace ECO.Infrastructure.Migrations
             modelBuilder.Entity("ECO.Domain.Entites.Inventory", b =>
                 {
                     b.Navigation("CartItems");
-
-                    b.Navigation("OrderDetails");
                 });
 
             modelBuilder.Entity("ECO.Domain.Entites.Order", b =>
@@ -1126,6 +1130,8 @@ namespace ECO.Infrastructure.Migrations
             modelBuilder.Entity("ECO.Domain.Entites.Size", b =>
                 {
                     b.Navigation("Inventories");
+
+                    b.Navigation("OrderDetails");
                 });
 #pragma warning restore 612, 618
         }

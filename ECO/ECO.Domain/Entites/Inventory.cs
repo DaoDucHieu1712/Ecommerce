@@ -14,6 +14,7 @@ namespace ECO.Domain.Entites
         public Inventory()
         {
             CartItems = new HashSet<CartItem>();
+            OrderDetails = new HashSet<OrderDetail>();
         }
         public int ProductId { get; set; }
         public int? SizeId { get; set; }
@@ -28,6 +29,7 @@ namespace ECO.Domain.Entites
         [ForeignKey(nameof(ColorId))]
         public Color? Color { get; set; }
         public virtual ICollection<CartItem> CartItems { get; set; }
+        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
 
     }
 }

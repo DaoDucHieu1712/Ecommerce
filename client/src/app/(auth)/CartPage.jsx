@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import CartItem from "./shared/components/cart/CartItem";
 import {
   Button,
@@ -9,6 +9,10 @@ import {
   Textarea,
   Typography,
 } from "@material-tailwind/react";
+import useCart from "../../shared/hooks/useCart";
+import { useDispatch } from "react-redux";
+import { checkoutActions } from "../../redux/checkoutSlice";
+
 const TABLE_HEAD = [
   "SẢN PHẨM",
   "KIỂU LOẠI",
@@ -46,6 +50,17 @@ const TABLE_ROWS = [
 ];
 
 const CartPage = () => {
+  const [location, setLocation] = useState();
+  const [phone, setPhone] = useState();
+  const [note, setNote] = useState();
+  const { cart, fetchCart } = useCart();
+  const dispatch = useDispatch();
+
+  const CheckoutHandler = async () => {
+    dispatch(checkoutActions.SetInfo({ location, phone, note }));
+    window.location.href = "/checkout";
+  };
+
   return (
     <div className="grid grid-cols-3 gap-6">
       <Card className="h-full w-full col-span-2">
@@ -69,13 +84,13 @@ const CartPage = () => {
             </tr>
           </thead>
           <tbody>
-            {TABLE_ROWS.map(({ name, job, date }, index) => {
+            {cart?.items.map((item, index) => {
               const isLast = index === TABLE_ROWS.length - 1;
               const classes = isLast
                 ? "p-4"
                 : "p-4 border-b border-blue-gray-50";
 
-              return <CartItem></CartItem>;
+              return <CartItem item={item} reload={fetchCart}></CartItem>;
             })}
           </tbody>
         </table>
@@ -86,9 +101,21 @@ const CartPage = () => {
             <h1 className="font-medium">Thông tin khác</h1>
           </div>
           <div className="p-3 flex flex-col gap-y-3">
-            <Input label="Số điện thoại" type="number"></Input>
-            <Input label="Địa chỉ" type="text"></Input>
-            <Textarea label="Ghi chú" className="h-[185px]" />
+            <Input
+              label="Số điện thoại"
+              type="number"
+              onChange={(e) => setPhone(e.target.value)}
+            ></Input>
+            <Input
+              label="Địa chỉ"
+              type="text"
+              onChange={(e) => setLocation(e.target.value)}
+            ></Input>
+            <Textarea
+              label="Ghi chú"
+              className="h-[185px]"
+              onChange={(e) => setNote(e.target.value)}
+            />
           </div>
         </div>
         <div className="border-borderpri border pb-5 rounded-lg">
@@ -98,7 +125,7 @@ const CartPage = () => {
           <div className="mt-3 p-3 pb-10 border-b border-borderpri">
             <div className="flex justify-between">
               <p className="font-medium text-lg text-gray-500">Tổng đơn hàng</p>
-              <span>300000 VND</span>
+              <span>{cart?.totalPrice} VND</span>
             </div>
             <div className="flex justify-between">
               <p className="font-medium text-lg text-gray-500">Phí ship</p>
@@ -108,10 +135,12 @@ const CartPage = () => {
           </div>
           <div className="p-3 flex justify-between">
             <p className="font-medium text-lg ">Tổng</p>
-            <span>300000 VND</span>
+            <span>{cart?.totalPrice} VND</span>
           </div>
           <div className="p-3 w-full">
-            <Button className="w-full">Thanh toán</Button>
+            <Button className="w-full" onClick={CheckoutHandler}>
+              Thanh toán
+            </Button>
           </div>
         </div>
       </div>

@@ -4,6 +4,7 @@ using ECO.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECO.Infrastructure.Migrations
 {
     [DbContext(typeof(ECOContext))]
-    partial class ECOContextModelSnapshot : ModelSnapshot
+    [Migration("20231216160823_update-order-detail")]
+    partial class updateorderdetail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -381,7 +383,6 @@ namespace ECO.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("PaymentId")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("PhoneNumber")
@@ -402,8 +403,6 @@ namespace ECO.Infrastructure.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.HasIndex("PaymentId");
-
                     b.ToTable("Order");
                 });
 
@@ -414,6 +413,9 @@ namespace ECO.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("ColorId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -433,6 +435,9 @@ namespace ECO.Infrastructure.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<int?>("SizeId")
+                        .HasColumnType("int");
+
                     b.Property<int>("UnitPrice")
                         .HasColumnType("int");
 
@@ -441,11 +446,15 @@ namespace ECO.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ColorId");
+
                     b.HasIndex("InventoryId");
 
                     b.HasIndex("OrderId");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("SizeId");
 
                     b.ToTable("OrderDetail");
                 });
@@ -836,24 +845,24 @@ namespace ECO.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "284297f0-5155-490b-948b-43902926a950",
-                            ConcurrencyStamp = "0195fe33-5821-45b1-9ea7-f409021e1bf2",
+                            Id = "cf8c8a3b-f70d-4c1d-b64e-2a6eb8406b74",
+                            ConcurrencyStamp = "ae1136fe-f779-4681-9c28-7d009cb96c88",
                             Name = "Admin",
                             NormalizedName = "ADMIN",
                             Description = "Admin"
                         },
                         new
                         {
-                            Id = "a349b50f-5292-43b1-b76b-f27f9c365a40",
-                            ConcurrencyStamp = "123963f9-e252-40fa-afb5-2d22475daab1",
+                            Id = "c245fb5b-348b-4ea9-a82a-fc18cfb7edb7",
+                            ConcurrencyStamp = "b9e8d0f4-74a5-420f-b12e-bd3945db1dad",
                             Name = "Staff",
                             NormalizedName = "STAFF",
                             Description = "Staff"
                         },
                         new
                         {
-                            Id = "daac049f-3367-4ae8-8583-ce64fa75cf1c",
-                            ConcurrencyStamp = "7aa5760a-4c04-483e-b4f1-50941b27d73a",
+                            Id = "2ca852b9-8fc3-45e7-aa8c-8ea39c21a749",
+                            ConcurrencyStamp = "43f89cf1-4a88-4edc-981d-4370ef5cfaf8",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER",
                             Description = "Customer"
@@ -950,19 +959,15 @@ namespace ECO.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ECO.Domain.Entites.Payment", "Payment")
-                        .WithMany()
-                        .HasForeignKey("PaymentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Customer");
-
-                    b.Navigation("Payment");
                 });
 
             modelBuilder.Entity("ECO.Domain.Entites.OrderDetail", b =>
                 {
+                    b.HasOne("ECO.Domain.Entites.Color", null)
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("ColorId");
+
                     b.HasOne("ECO.Domain.Entites.Inventory", "Inventory")
                         .WithMany("OrderDetails")
                         .HasForeignKey("InventoryId")
@@ -980,6 +985,10 @@ namespace ECO.Infrastructure.Migrations
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.ClientNoAction)
                         .IsRequired();
+
+                    b.HasOne("ECO.Domain.Entites.Size", null)
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("SizeId");
 
                     b.Navigation("Inventory");
 
@@ -1093,6 +1102,8 @@ namespace ECO.Infrastructure.Migrations
             modelBuilder.Entity("ECO.Domain.Entites.Color", b =>
                 {
                     b.Navigation("Inventories");
+
+                    b.Navigation("OrderDetails");
                 });
 
             modelBuilder.Entity("ECO.Domain.Entites.Discount", b =>
@@ -1126,6 +1137,8 @@ namespace ECO.Infrastructure.Migrations
             modelBuilder.Entity("ECO.Domain.Entites.Size", b =>
                 {
                     b.Navigation("Inventories");
+
+                    b.Navigation("OrderDetails");
                 });
 #pragma warning restore 612, 618
         }

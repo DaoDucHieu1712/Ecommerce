@@ -6,6 +6,7 @@ import LoginPage from "./app/(public)/LoginPage";
 import RegisterPage from "./app/(public)/RegisterPage";
 import ProductDetail from "./app/(public)/ProductDetail";
 import CartPage from "./app/(auth)/CartPage";
+import Checkout from "./app/(auth)/Checkout";
 const NotFoundPage = lazy(() => import("./app/(public)/NotFoundPage"));
 const AccessDeniedPage = lazy(() => import("./app/(public)/AccessDeniedPage"));
 const HomePage = lazy(() => import("./app/(public)/HomePage"));
@@ -31,6 +32,7 @@ function App() {
           <Route path="/shop" element={<ShopPage />} />
           <Route path="/shop/product/:id" element={<ProductDetail />} />
           <Route path="/cart" element={<CartPage />} />
+          <Route path="/checkout" element={<Checkout />} />
         </Route>
         <Route element={<DashboardLayout />}>
           <Route path="/admin/category" element={<CategoryManagerPage />} />

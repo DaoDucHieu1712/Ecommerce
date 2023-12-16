@@ -14,12 +14,10 @@ namespace ECO.Domain.Entites
         public Size()
         {
             Inventories = new HashSet<Inventory>();
-            OrderDetails = new HashSet<OrderDetail>();
         }
         public string SizeName { get; set; }
         public string? Description { get; set; }
         public ICollection<Inventory> Inventories { get; set; }
-        public ICollection<OrderDetail> OrderDetails { get; set; }
 
     }
 }

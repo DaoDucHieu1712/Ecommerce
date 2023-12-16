@@ -36,6 +36,7 @@ namespace ECO.Infrastructure.Contexts
         public virtual DbSet<CartItem> CartItems { get; set; }
         public virtual DbSet<DiscountUser> DiscountUsers { get; set; }
         public virtual DbSet<Resource> Resources { get; set; }
+        public virtual DbSet<Payment> Payments { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -54,8 +55,7 @@ namespace ECO.Infrastructure.Contexts
             builder.Entity<Inventory>().HasOne(x => x.Size).WithMany(x => x.Inventories).HasForeignKey(x => x.SizeId).OnDelete(DeleteBehavior.ClientNoAction);
 
             builder.Entity<OrderDetail>().HasOne(x => x.Product).WithMany(x => x.OrderDetails).HasForeignKey(x => x.ProductId).OnDelete(DeleteBehavior.ClientNoAction);
-            builder.Entity<OrderDetail>().HasOne(x => x.Color).WithMany(x => x.OrderDetails).HasForeignKey(x => x.ColorId).OnDelete(DeleteBehavior.ClientNoAction);
-            builder.Entity<OrderDetail>().HasOne(x => x.Size).WithMany(x => x.OrderDetails).HasForeignKey(x => x.SizeId).OnDelete(DeleteBehavior.ClientNoAction);
+            builder.Entity<OrderDetail>().HasOne(x => x.Inventory).WithMany(x => x.OrderDetails).HasForeignKey(x => x.InventoryId).OnDelete(DeleteBehavior.ClientNoAction);
             builder.Entity<OrderDetail>().HasOne(x => x.Order).WithMany(x => x.OrderDetails).HasForeignKey(x => x.OrderId).OnDelete(DeleteBehavior.ClientNoAction);
 
             builder.Entity<Rating>().HasOne(x => x.Product).WithMany(x => x.Ratings).HasForeignKey(x => x.ProductId).OnDelete(DeleteBehavior.ClientNoAction);

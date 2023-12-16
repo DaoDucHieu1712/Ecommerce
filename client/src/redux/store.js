@@ -1,7 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
+import checkoutReducer from "./checkoutSlice";
 
 const store = configureStore({
-  reducer: {},
+  reducer: {
+    checkout: checkoutReducer,
+  },
 });
 
 export default store;

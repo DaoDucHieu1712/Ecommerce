@@ -53,7 +53,10 @@ namespace ECO.Infrastructure.Services
         public async Task ClearCart(string userId)
         {
             var cart = await _cartRepository.FindSingle(x => x.CustomerId == userId, x => x.Items);
-            await _cartItemRepository.RemoveMultiple((List<CartItem>)cart.Items);
+            foreach (var item in cart.Items)
+            {
+                await _cartItemRepository.Remove(item);
+            }
         }
 
         public async Task DescreaseQuantityCartItem(int itemid)

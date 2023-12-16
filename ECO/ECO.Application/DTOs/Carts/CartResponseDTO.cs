@@ -10,7 +10,6 @@ namespace ECO.Application.DTOs.Carts
     {
         public int Id { get; set; }
         public string CustomerId { get; set; }
-        public string Type { get; set; }
         public decimal TotalPrice { get; set; }
         public int Quantity { get; set; }
         public virtual List<CartItemResponseDTO> Items { get; set; }

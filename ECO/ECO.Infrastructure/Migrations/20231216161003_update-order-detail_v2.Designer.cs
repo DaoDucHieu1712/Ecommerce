@@ -4,6 +4,7 @@ using ECO.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECO.Infrastructure.Migrations
 {
     [DbContext(typeof(ECOContext))]
-    partial class ECOContextModelSnapshot : ModelSnapshot
+    [Migration("20231216161003_update-order-detail_v2")]
+    partial class updateorderdetail_v2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -381,7 +383,6 @@ namespace ECO.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("PaymentId")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("PhoneNumber")
@@ -401,8 +402,6 @@ namespace ECO.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
-
-                    b.HasIndex("PaymentId");
 
                     b.ToTable("Order");
                 });
@@ -836,24 +835,24 @@ namespace ECO.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "284297f0-5155-490b-948b-43902926a950",
-                            ConcurrencyStamp = "0195fe33-5821-45b1-9ea7-f409021e1bf2",
+                            Id = "d3a327ca-f469-403b-b0d1-9f489e9f4fad",
+                            ConcurrencyStamp = "0bd59da5-1595-45c5-87b4-c40de5c04851",
                             Name = "Admin",
                             NormalizedName = "ADMIN",
                             Description = "Admin"
                         },
                         new
                         {
-                            Id = "a349b50f-5292-43b1-b76b-f27f9c365a40",
-                            ConcurrencyStamp = "123963f9-e252-40fa-afb5-2d22475daab1",
+                            Id = "ff034d46-d470-4363-b0bf-c522ae2f0f3d",
+                            ConcurrencyStamp = "d5e57788-9e02-4434-a5c0-194ec619b244",
                             Name = "Staff",
                             NormalizedName = "STAFF",
                             Description = "Staff"
                         },
                         new
                         {
-                            Id = "daac049f-3367-4ae8-8583-ce64fa75cf1c",
-                            ConcurrencyStamp = "7aa5760a-4c04-483e-b4f1-50941b27d73a",
+                            Id = "94acac8d-ee9b-4138-98fd-78a6c0912843",
+                            ConcurrencyStamp = "e635c600-56ce-47dd-825b-45c7053aed33",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER",
                             Description = "Customer"
@@ -950,15 +949,7 @@ namespace ECO.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ECO.Domain.Entites.Payment", "Payment")
-                        .WithMany()
-                        .HasForeignKey("PaymentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Customer");
-
-                    b.Navigation("Payment");
                 });
 
             modelBuilder.Entity("ECO.Domain.Entites.OrderDetail", b =>

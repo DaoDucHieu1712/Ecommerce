@@ -20,5 +20,5 @@ export default function useCart() {
       .catch((err) => setError(err));
   };
 
-  return { cart, loading, error };
+  return { cart, loading, error, fetchCart };
 }

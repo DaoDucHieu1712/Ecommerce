@@ -1,22 +1,20 @@
-﻿using ECO.Domain.Common;
+﻿using ECO.Domain.Entites;
 using ECO.Domain.Enums;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace ECO.Domain.Entites
+namespace ECO.Application.DTOs.Orders
 {
-    [Table("Order")]
-    public class Order : BaseEntity<int>
+    public class OrderRequestDTO
     {
-        public Order()
-        {
-            OrderDetails = new HashSet<OrderDetail>();
-        }
-        public string CustomerId { get; set; }
+        [JsonIgnore]
+        public int Id { get; set; }
+        [JsonIgnore]
+        public string? CustomerId { get; set; }
         public decimal TotalPrice { get; set; }
         public string ShipAddress { get; set; }
         public string PhoneNumber { get; set; }
@@ -24,10 +22,7 @@ namespace ECO.Domain.Entites
         public string? Note { get; set; }
         public OrderStatus OrderStatus { get; set; }
         public int? PaymentId { get; set; }
-        [ForeignKey(nameof(PaymentId))]
         public Payment Payment { get; set; }
-        [ForeignKey(nameof(CustomerId))]
-        public AppUser Customer { get; set; }
-        public ICollection<OrderDetail> OrderDetails { get; set; }
+        public List<OrderDetailRequestDTO> OrderDetails { get; set; }
     }
 }

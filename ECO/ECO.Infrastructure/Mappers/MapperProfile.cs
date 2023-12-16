@@ -5,6 +5,7 @@ using ECO.Application.DTOs.Category;
 using ECO.Application.DTOs.Color;
 using ECO.Application.DTOs.Discount;
 using ECO.Application.DTOs.Inventory;
+using ECO.Application.DTOs.Orders;
 using ECO.Application.DTOs.Products;
 using ECO.Application.DTOs.Rating;
 using ECO.Application.DTOs.Size;
@@ -31,6 +32,7 @@ namespace ECO.Infrastructure.Mappers
             DiscountMapper();
             RatingMapper();
             CartMapper();
+            OrderMapper();
         }
 
         public void UserMapper()
@@ -103,7 +105,7 @@ namespace ECO.Infrastructure.Mappers
         {
             CreateMap<Cart, CartResponseDTO>()
                 .ForMember(x => x.Quantity, opt => opt.MapFrom(src => src.Items.Count))
-                .ForMember(x => x.TotalPrice, opt => opt.MapFrom(src => src.Items.Any() ? src.Items.Average(item => item.UnitPrice) : 0))
+                .ForMember(x => x.TotalPrice, opt => opt.MapFrom(src => src.Items.Any() ? src.Items.Sum(item => (item.UnitPrice * (decimal)item.Quantity)) : 0))
                 .ReverseMap();
             CreateMap<Cart, CartRequestDTO>().ReverseMap();
             CreateMap<CartItem, CartItemResponseDTO>()
@@ -111,6 +113,14 @@ namespace ECO.Infrastructure.Mappers
                 .ForMember(x => x.ProductImage, opt => opt.MapFrom(src => src.Product.ImageUrl))
                 .ReverseMap();
             CreateMap<CartItem, CartItemRequestDTO>().ReverseMap();
+        }
+
+        public void OrderMapper()
+        {
+            CreateMap<Order, OrderResponseDTO>().ReverseMap();
+            CreateMap<Order, OrderRequestDTO>().ReverseMap();
+            CreateMap<OrderDetail, OrderDetailRequestDTO>().ReverseMap();
+            CreateMap<OrderDetail, OrderDetailResponseDTO>().ReverseMap();
         }
     }
 }

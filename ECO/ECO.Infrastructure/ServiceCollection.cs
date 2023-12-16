@@ -34,6 +34,7 @@ namespace ECO.Infrastructure
             services.AddScoped<IRatingService, RatingService>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<ICartService, CartService>();
+            services.AddScoped<IOrderService, OrderService>();
             return services;
         }
 
@@ -50,6 +51,9 @@ namespace ECO.Infrastructure
             services.AddScoped<IRatingRepository, RatingRepository>();
             services.AddScoped<ICartRepository, CartRepository>();
             services.AddScoped<ICartItemRepository, CartItemRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
             return services;
         }
 

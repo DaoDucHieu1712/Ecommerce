@@ -14,11 +14,9 @@ namespace ECO.Domain.Entites
         public Color() {
 
             Inventories = new HashSet<Inventory>();
-            OrderDetails = new HashSet<OrderDetail>();
         
         }
         public string ColorName { get; set; }
         public ICollection<Inventory> Inventories { get; set; }
-        public ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }

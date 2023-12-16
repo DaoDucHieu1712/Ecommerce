@@ -47,5 +47,64 @@ namespace ECO.WebApi.Controllers
             }
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> IncreaseQuantityCartItem(int id)
+        {
+            try
+            {
+                await _cartService.IncreaseQuantityCartItem(id);
+                return Ok("Increase quantity success !");
+            } 
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> DecreseaQuantityCartItem(int id)
+        {
+            try
+            {
+                await _cartService.DescreaseQuantityCartItem(id);
+                return Ok("Descrease quantity success !");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> RemoveCartItem(int id)
+        {
+            try
+            {
+                await _cartService.RemoveCartItem(id);
+                return Ok("Descrease quantity success !");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> ClearCart()
+        {
+            try
+            {
+                var userId = User?.Identity?.Name ?? "";
+                await _cartService.ClearCart(userId);
+                return Ok("Descrease quantity success !");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+
     }
 }
