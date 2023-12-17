@@ -9,5 +9,7 @@ namespace ECO.Application.Services
 {
     public interface IDiscountService :IBaseService<DiscountResponseDTO, DiscountRequestDTO, int>
     {
+        Task<UseDiscountDTO> CheckDiscount(string Code, string customerId);
+        Task UseDiscount(string Code,string customerId);
     }
 }

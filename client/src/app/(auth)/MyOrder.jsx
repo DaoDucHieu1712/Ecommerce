@@ -1,4 +1,4 @@
-import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
+import React, { useState } from "react";
 import {
   Button,
   IconButton,
@@ -7,14 +7,13 @@ import {
   Select,
   Typography,
 } from "@material-tailwind/react";
-import { useQuery } from "@tanstack/react-query";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import OrderStatus from "../../shared/components/status/OrderStatus";
-import PaymentStatus from "../../shared/components/status/PaymentStatus";
-import OrderService from "../../shared/services/OrderService";
 import PaymentMethod from "../../shared/components/status/PaymentMethod";
-
+import PaymentStatus from "../../shared/components/status/PaymentStatus";
+import { Link } from "react-router-dom";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
+import OrderService from "../../shared/services/OrderService";
+import { useQuery } from "@tanstack/react-query";
 const TABLE_HEAD = [
   "Mã Đơn hàng",
   "Khách hàng",
@@ -25,8 +24,7 @@ const TABLE_HEAD = [
   "Tổng tiền",
   "Chi tiết",
 ];
-
-const OrderManagerPage = () => {
+const MyOrder = () => {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(7);
   const [customer, setCustomer] = useState("");
@@ -49,7 +47,7 @@ const OrderManagerPage = () => {
       sortType,
     ],
     queryFn: async (context) => {
-      return OrderService.GetAllOrder(context);
+      return OrderService.MyOrder(context);
     },
   });
 
@@ -62,10 +60,10 @@ const OrderManagerPage = () => {
             color="blue-gray"
             className="uppercase font-semibold"
           >
-            Quản lý Đơn hàng
+            Đơn hàng của tui
           </Typography>
           <Typography color="gray" className="mt-1 text-sm font-normal">
-            Tất cả thông tin về đơn hàng
+            Tất cả thông tin về đơn hàng của bạn
           </Typography>
         </div>
       </div>
@@ -102,12 +100,7 @@ const OrderManagerPage = () => {
             <Option value="4">Đã hủy</Option>
           </Select>
         </div>
-        <div className="w-full">
-          <Input
-            label="Tên khách hàng"
-            onChange={(e) => setCustomer(e.target.value)}
-          />
-        </div>
+
         <div className="w-full">
           <Input
             label="Mã đơn hàng"
@@ -169,7 +162,7 @@ const OrderManagerPage = () => {
                   <td className={classes}>
                     <div className="flex gap-x-3">
                       <Link
-                        to={`/admin/order/${item.id}`}
+                        to={`/my-order/${item.id}`}
                         className="px-6 py-2 text-light-blue-500 font-medium rounded-lg cursor-pointer"
                       >
                         chi tiết đơn hàng
@@ -227,4 +220,4 @@ const OrderManagerPage = () => {
   );
 };
 
-export default OrderManagerPage;
+export default MyOrder;

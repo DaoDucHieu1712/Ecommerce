@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CartItem from "./shared/components/cart/CartItem";
 import {
   Button,
@@ -84,6 +84,11 @@ const CartPage = () => {
             </tr>
           </thead>
           <tbody>
+            {cart?.items.length === 0 && (
+              <p className="p-3 my-3 font-medium text-lg">
+                Bạn không có đơn hàng nào cả !!!
+              </p>
+            )}
             {cart?.items.map((item, index) => {
               const isLast = index === TABLE_ROWS.length - 1;
               const classes = isLast
@@ -120,7 +125,7 @@ const CartPage = () => {
         </div>
         <div className="border-borderpri border pb-5 rounded-lg">
           <div className="heading">
-            <h1 className="text-2xl p-3">Thanh toán giỏ hàng</h1>
+            <h1 className="text-2xl p-3">Giỏ hàng của bạn</h1>
           </div>
           <div className="mt-3 p-3 pb-10 border-b border-borderpri">
             <div className="flex justify-between">

@@ -1,5 +1,6 @@
 ﻿using ECO.Application.DTOs.Discount;
 using ECO.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.CompilerServices;
@@ -43,7 +44,6 @@ namespace ECO.WebApi.Controllers
             }
         }
 
-
         [HttpPost]
         public async Task<IActionResult> Create(DiscountRequestDTO discountRequestDTO)
         {
@@ -64,7 +64,7 @@ namespace ECO.WebApi.Controllers
             try
             {
                 discountRequestDTO.Id = id;
-                await _discountService.Add(discountRequestDTO);
+                await _discountService.Update(discountRequestDTO);
                 return NoContent();
             }
             catch (Exception ex)
@@ -87,6 +87,37 @@ namespace ECO.WebApi.Controllers
             }
         }
 
+        [Authorize]
+        [HttpGet("{code}")]
+        public async Task<IActionResult> CheckDiscount(string code)
+        {
+            try
+            {
+                var customerId = User?.Identity?.Name ?? "";
+                return Ok(await _discountService.CheckDiscount(code, customerId));
+            }
+            catch (Exception ex)
+            {
 
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpGet("{code}")]
+        public async Task<IActionResult> UseDiscount(string code)
+        {
+            try
+            {
+                var customerId = User?.Identity?.Name ?? "";
+                await _discountService.UseDiscount(code, customerId);
+                return Ok("Use Discount success !!");
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }

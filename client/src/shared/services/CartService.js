@@ -21,9 +21,10 @@ const AuthService = {
     const url = `/api/Cart/RemoveCartItem/${id}`;
     return axiosConfig.delete(url);
   },
-  async ClearCart(){
-    
-  }
+  async ClearCart() {
+    const url = "/api/Cart/ClearCart";
+    return axiosConfig.get(url);
+  },
 };
 
 export default AuthService;

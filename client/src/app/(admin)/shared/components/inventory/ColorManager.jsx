@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ProductView = () => {
+const ColorManager = () => {
     return (
         <div>
             
@@ -8,4 +8,4 @@ const ProductView = () => {
     );
 };
 
-export default ProductView;
+export default ColorManager;

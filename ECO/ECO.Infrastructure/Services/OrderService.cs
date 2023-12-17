@@ -6,6 +6,7 @@ using ECO.Application.Repositories;
 using ECO.Application.Services;
 using ECO.DataTable;
 using ECO.Domain.Entites;
+using ECO.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -41,9 +42,18 @@ namespace ECO.Infrastructure.Services
             return await _paymentRepository.CreateAndGetEntity(payment);
         }
 
-        public Task<OrderResponseDTO> FindById(int id)
+        public async Task<OrderResponseDTO> FindById(int id)
         {
-            throw new NotImplementedException();
+            var _order = await _orderRepository
+                .FindAll(x => x.Id == id)
+                .Include(x => x.Payment)
+                .Include(x => x.Customer)
+                .Include(x => x.OrderDetails).ThenInclude(x => x.Product)
+                .Include(x => x.OrderDetails).ThenInclude(x => x.Inventory)
+                .FirstOrDefaultAsync();
+
+
+            return _mapper.Map<OrderResponseDTO>(_order);
         }
 
         public async Task<List<OrderResponseDTO>> GetAll()
@@ -53,7 +63,7 @@ namespace ECO.Infrastructure.Services
 
         public async Task<EntityFilterDTO<OrderResponseDTO>> GetAllOrder(OrderFilterDTO orderFilterDTO)
         {
-            var query = _orderRepository.FindAll();
+            var query = _orderRepository.FindAll(x => x.Payment, x=>x.Customer);
 
             if (orderFilterDTO.SortType != null)
             {
@@ -126,9 +136,9 @@ namespace ECO.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public Task<EntityFilterDTO<OrderResponseDTO>> MyOrder(string id, OrderFilterDTO orderFilterDTO)
+        public async Task<EntityFilterDTO<OrderResponseDTO>> MyOrder(string id, OrderFilterDTO orderFilterDTO)
         {
-            var query = _orderRepository.FindAll(x => x.CustomerId == id);
+            var query = _orderRepository.FindAll(x => x.CustomerId == id, x=>x.Payment, x => x.Customer);
 
             if (orderFilterDTO.SortType != null)
             {
@@ -201,14 +211,22 @@ namespace ECO.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public Task UpdateOrderPayment(int id, int status)
+        public async Task UpdateOrderPayment(int id, PaymentStatus status)
         {
-            throw new NotImplementedException();
+            var _od = await _orderRepository.FindSingle(x => x.Id == id);
+            if(_od == null) throw new Exception("Không tìm thấy Order nào !");
+            var _payment = await _paymentRepository.FindSingle(x => x.Id == _od.PaymentId);
+            if (_payment == null) throw new Exception("Không tìm thấy Payment nào !");
+            _payment.Status = status;
+            await _paymentRepository.Update(_payment, "CreatedAt");
         }
 
-        public Task UpdateOrderStatus(int id, int status)
+        public async Task UpdateOrderStatus(int id, OrderStatus status)
         {
-            throw new NotImplementedException();
+            var _od = await _orderRepository.FindSingle(x => x.Id == id);
+            if (_od == null) throw new Exception("Không tìm thấy Order nào !");
+            _od.OrderStatus =status;
+            await _orderRepository.Update(_od, "CreatedAt");
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using ECO.Application.DTOs.Orders;
 using ECO.Application.Services;
+using ECO.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -45,12 +46,55 @@ namespace ECO.WebApi.Controllers
             }
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> MyOrder(string id, [FromQuery] OrderFilterDTO orderFilterDTO)
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> MyOrder([FromQuery] OrderFilterDTO orderFilterDTO)
         {
             try
             {
-                return Ok(id);
+                var userId = User?.Identity?.Name ?? "";
+                return Ok(await _orderService.MyOrder(userId, orderFilterDTO));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> FindById(int id)
+        {
+            try
+            {
+                return Ok(await _orderService.FindById(id));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateStatus(int id , OrderStatus status)
+        {
+            try
+            {
+                await _orderService.UpdateOrderStatus(id, status);
+                return Ok("Update successful !!");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdatePaymentStatus(int id, PaymentStatus status)
+        {
+            try
+            {
+                await _orderService.UpdateOrderPayment(id, status);
+                return Ok("Update successful !!");
             }
             catch (Exception ex)
             {

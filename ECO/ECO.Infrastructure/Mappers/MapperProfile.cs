@@ -117,10 +117,18 @@ namespace ECO.Infrastructure.Mappers
 
         public void OrderMapper()
         {
-            CreateMap<Order, OrderResponseDTO>().ReverseMap();
+            CreateMap<Order, OrderResponseDTO>()
+                .ForMember(dest => dest.PaymentMethod, opt => opt.MapFrom(src => src.Payment.Method))
+                .ForMember(dest => dest.PaymentStatus, opt => opt.MapFrom(src => src.Payment.Status))
+                .ForMember(dest => dest.CustomerName, opt => opt.MapFrom(src => src.Customer.UserName))
+                .ReverseMap();
             CreateMap<Order, OrderRequestDTO>().ReverseMap();
-            CreateMap<OrderDetail, OrderDetailRequestDTO>().ReverseMap();
-            CreateMap<OrderDetail, OrderDetailResponseDTO>().ReverseMap();
+            CreateMap<OrderDetail, OrderDetailRequestDTO>()
+                .ReverseMap();
+            CreateMap<OrderDetail, OrderDetailResponseDTO>()
+                .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name))
+                .ForMember(dest => dest.ProductImage, opt => opt.MapFrom(src => src.Product.ImageUrl))
+                .ReverseMap();
         }
     }
 }

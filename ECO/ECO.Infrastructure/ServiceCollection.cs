@@ -54,6 +54,7 @@ namespace ECO.Infrastructure
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();
+            services.AddScoped<IDiscountUserRepository, DiscountUserRepository>();
             return services;
         }
 

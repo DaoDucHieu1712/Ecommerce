@@ -21,8 +21,8 @@ import SizeService from "../../../../../shared/services/SizeService";
 import InventoryService from "../../../../../shared/services/InventoryService";
 
 const schema = yup.object({
-  sizeId: yup.number().required("Kích cỡ không thể để trống !"),
-  colorId: yup.number().required("Màu sắc không thể để trống !"),
+  sizeId: yup.number(),
+  colorId: yup.number(),
   quantity: yup.number().required("Số lượng không thể để trống"),
   unitPrice: yup.number().required("Giá tiền không thể để trống"),
 });

@@ -27,7 +27,7 @@ const Checkout = () => {
       shipAddress: checkoutSelector.info.location,
       phoneNumber: checkoutSelector.info.phone,
       cancelReason: "",
-      note: checkoutSelector.info.phone,
+      note: checkoutSelector.info.note,
       orderStatus: 1,
       payment: {
         amount: cart?.totalPrice,
@@ -38,6 +38,7 @@ const Checkout = () => {
         return {
           productId: item.productId,
           inventoryId: item.inventoryId,
+          type: item.type,
           quantity: item.quantity,
           unitPrice: item.unitPrice,
         };
