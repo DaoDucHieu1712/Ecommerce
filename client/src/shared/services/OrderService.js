@@ -9,8 +9,8 @@ const OrderService = {
     const url = "/api/Order/FindById/" + id;
     return axiosConfig.get(url);
   },
-  async UpdateStatus(id, status) {
-    const url = `/api/Order/UpdateStatus/${id}?status=${status}`;
+  async UpdateStatus(id, status, reason) {
+    const url = `/api/Order/UpdateStatus/${id}?status=${status}&reason=${reason}`;
     return axiosConfig.put(url);
   },
   async UpdatePayment(id, status) {

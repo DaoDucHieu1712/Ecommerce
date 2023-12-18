@@ -1,6 +1,6 @@
 import axiosConfig from "./AxiosConfig";
 
-const AuthService = {
+const CartService = {
   async GetCart() {
     const url = "/api/Cart/GetCart";
     return axiosConfig.get(url);
@@ -27,4 +27,4 @@ const AuthService = {
   },
 };
 
-export default AuthService;
+export default CartService;

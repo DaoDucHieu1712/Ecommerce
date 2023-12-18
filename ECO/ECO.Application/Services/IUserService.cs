@@ -18,7 +18,9 @@ namespace ECO.Application.Services
         public DataResult<AppUser> GetUsersPaging(DataRequest request);
         public Task<UserDTO> GetCurrentUser(string id);
         public Task ForgetPassword(string email);
+        public Task ResetPassword(ResetPasswordDTO resetPasswordDTO);
         public Task<UserDTO> GetUserByEmail(string email);
+        public Task UpdateProfile(UserDTO userDTO);
         
     }
 }

@@ -12,6 +12,7 @@ import {
 import useCart from "../../shared/hooks/useCart";
 import { useDispatch } from "react-redux";
 import { checkoutActions } from "../../redux/checkoutSlice";
+import { Link } from "react-router-dom";
 
 const TABLE_HEAD = [
   "SẢN PHẨM",
@@ -50,14 +51,10 @@ const TABLE_ROWS = [
 ];
 
 const CartPage = () => {
-  const [location, setLocation] = useState();
-  const [phone, setPhone] = useState();
-  const [note, setNote] = useState();
   const { cart, fetchCart } = useCart();
   const dispatch = useDispatch();
 
   const CheckoutHandler = async () => {
-    dispatch(checkoutActions.SetInfo({ location, phone, note }));
     window.location.href = "/checkout";
   };
 
@@ -86,7 +83,7 @@ const CartPage = () => {
           <tbody>
             {cart?.items.length === 0 && (
               <p className="p-3 my-3 font-medium text-lg">
-                Bạn không có đơn hàng nào cả !!!
+                Giỏ hàng của bạn không có gì cả !!!
               </p>
             )}
             {cart?.items.map((item, index) => {
@@ -102,30 +99,8 @@ const CartPage = () => {
       </Card>
       <div className="flex flex-col gap-y-5 shadow-lg">
         <div className="border-borderpri border pb-5 rounded-lg">
-          <div className="p-3 border-b border-borderpri">
-            <h1 className="font-medium">Thông tin khác</h1>
-          </div>
-          <div className="p-3 flex flex-col gap-y-3">
-            <Input
-              label="Số điện thoại"
-              type="number"
-              onChange={(e) => setPhone(e.target.value)}
-            ></Input>
-            <Input
-              label="Địa chỉ"
-              type="text"
-              onChange={(e) => setLocation(e.target.value)}
-            ></Input>
-            <Textarea
-              label="Ghi chú"
-              className="h-[185px]"
-              onChange={(e) => setNote(e.target.value)}
-            />
-          </div>
-        </div>
-        <div className="border-borderpri border pb-5 rounded-lg">
           <div className="heading">
-            <h1 className="text-2xl p-3">Giỏ hàng của bạn</h1>
+            <h1 className="text-lg p-3">Giỏ hàng của bạn</h1>
           </div>
           <div className="mt-3 p-3 pb-10 border-b border-borderpri">
             <div className="flex justify-between">
@@ -142,7 +117,10 @@ const CartPage = () => {
             <p className="font-medium text-lg ">Tổng</p>
             <span>{cart?.totalPrice} VND</span>
           </div>
-          <div className="p-3 w-full">
+          <div className="p-3 w-full flex flex-col gap-y-3">
+            <Link to="/shop">
+              <Button className="w-full">Mua hàng tiếp !</Button>
+            </Link>
             <Button className="w-full" onClick={CheckoutHandler}>
               Thanh toán
             </Button>

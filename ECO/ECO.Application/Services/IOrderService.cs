@@ -16,7 +16,7 @@ namespace ECO.Application.Services
         Task<EntityFilterDTO<OrderResponseDTO>>GetAllOrder(OrderFilterDTO orderFilterDTO);
         Task<EntityFilterDTO<OrderResponseDTO>> MyOrder(string id , OrderFilterDTO orderFilterDTO);
         Task<List<OrderDetailResponseDTO>> GetOrderDetail(int id);
-        Task UpdateOrderStatus(int id, OrderStatus status);
+        Task UpdateOrderStatus(int id, OrderStatus status, string? reason);
         Task UpdateOrderPayment(int id, PaymentStatus status);
     }
 }

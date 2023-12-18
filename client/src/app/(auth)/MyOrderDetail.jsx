@@ -1,15 +1,25 @@
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import OrderService from "../../shared/services/OrderService";
 import { toast } from "react-toastify";
-import { Button, Spinner } from "@material-tailwind/react";
+import {
+  Button,
+  Dialog,
+  DialogBody,
+  DialogFooter,
+  DialogHeader,
+  Spinner,
+  Textarea,
+} from "@material-tailwind/react";
 import OrderStatus from "../../shared/components/status/OrderStatus";
 import OrderItem from "../(admin)/shared/components/order/OrderItem";
 
 const MyOrderDetail = () => {
   const { id } = useParams();
-
+  const [open, setOpen] = useState(false);
+  const [reason, setReason] = useState("");
+  const handleOpen = () => setOpen(!open);
   const orderQuery = useQuery({
     queryKey: ["order-detail"],
     queryFn: async () => {
@@ -18,7 +28,7 @@ const MyOrderDetail = () => {
   });
 
   const OrderRejectHandler = async () => {
-    await OrderService.UpdateStatus(id, 4).then((res) => {
+    await OrderService.UpdateStatus(id, 4, reason).then((res) => {
       toast.success("Xác nhận hủy đơn hàng thành công !");
       orderQuery.refetch();
     });
@@ -94,9 +104,42 @@ const MyOrderDetail = () => {
             </div>
             <div className="flex flex-col gap-y-2 mt-3">
               {orderQuery.data?.orderStatus === 1 && (
-                <Button size="sm" color="red" onClick={OrderRejectHandler}>
-                  Hủy đơn hàng
-                </Button>
+                <>
+                  <Button onClick={handleOpen} className="w-full">
+                    Hủy đơn hàng
+                  </Button>
+                  <Dialog open={open} handler={handleOpen}>
+                    <DialogHeader className="text-primary">
+                      Hủy đơn hàng
+                    </DialogHeader>
+                    <DialogBody>
+                      <h1 className="mb-3 text-xl uppercase font-semibold">
+                        Bạn xác nhận hủy đơn hàng #{orderQuery.data?.id}
+                      </h1>
+                      <div>
+                        <Textarea
+                          label="Lí do hủy đơn hàng"
+                          className="mt-3"
+                          value={reason}
+                          onChange={(e) => setReason(e.target.value)}
+                        />
+                      </div>
+                    </DialogBody>
+                    <DialogFooter>
+                      <Button
+                        variant="text"
+                        color="red"
+                        onClick={handleOpen}
+                        className="mr-1"
+                      >
+                        <span>Hủy</span>
+                      </Button>
+                      <Button onClick={OrderRejectHandler}>
+                        <span>Xác nhận</span>
+                      </Button>
+                    </DialogFooter>
+                  </Dialog>
+                </>
               )}
             </div>
           </div>

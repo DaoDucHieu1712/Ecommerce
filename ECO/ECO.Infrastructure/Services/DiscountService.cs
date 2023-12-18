@@ -47,6 +47,7 @@ namespace ECO.Infrastructure.Services
             return new UseDiscountDTO
             {
                 Massage = "Mã giảm giá hợp lệ !!",
+                Percent = _discount.Percent,
                 IsUse = true
             };
         }

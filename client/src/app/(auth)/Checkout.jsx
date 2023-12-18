@@ -1,11 +1,19 @@
-import { Button, Card, Radio, Typography } from "@material-tailwind/react";
-import React, { useState } from "react";
+import {
+  Button,
+  Card,
+  Input,
+  Radio,
+  Textarea,
+  Typography,
+} from "@material-tailwind/react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import useCart from "../../shared/hooks/useCart";
 import OrderService from "../../shared/services/OrderService";
 import CartService from "../../shared/services/CartService";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import DiscountService from "../../shared/services/DiscountService";
 const TABLE_HEAD = [
   "SẢN PHẨM",
   "KIỂU LOẠI",
@@ -15,22 +23,25 @@ const TABLE_HEAD = [
 ];
 
 const Checkout = () => {
-  const checkoutSelector = useSelector((state) => state.checkout);
+  const { cart } = useCart();
+  const [location, setLocation] = useState();
+  const [phone, setPhone] = useState();
+  const [note, setNote] = useState();
+  const [code, setCode] = useState();
+  const [totalPrice, setTotalPrice] = useState();
   const navigate = useNavigate();
-  const { cart, fetchCart } = useCart();
-
   const [paymentType, setPaymentType] = useState();
 
   const CreateOrderHandler = async () => {
     const data = {
-      totalPrice: cart?.totalPrice,
-      shipAddress: checkoutSelector.info.location,
-      phoneNumber: checkoutSelector.info.phone,
+      totalPrice: totalPrice,
+      shipAddress: location,
+      phoneNumber: phone,
       cancelReason: "",
-      note: checkoutSelector.info.note,
+      note: note,
       orderStatus: 1,
       payment: {
-        amount: cart?.totalPrice,
+        amount: totalPrice,
         method: 1,
         status: 1,
       },
@@ -48,11 +59,25 @@ const Checkout = () => {
       .then(async (res) => {
         toast.success("Đặt hàng thành công !");
         await CartService.ClearCart();
+        await DiscountService.UseDiscount(code);
         navigate("/");
       })
       .catch((err) => {
         toast.error(err.response.data);
       });
+  };
+
+  useEffect(() => {
+    setTotalPrice(cart?.totalPrice);
+  }, [cart]);
+
+  const useDiscountHandler = async () => {
+    await DiscountService.Check(code)
+      .then((res) => {
+        setTotalPrice(totalPrice - (totalPrice * res.percent) / 100);
+        toast.success("Áp dụng mã giảm giá thành công !");
+      })
+      .catch((err) => toast.error(err.response.data));
   };
 
   return (
@@ -79,12 +104,7 @@ const Checkout = () => {
               </tr>
             </thead>
             <tbody>
-              {cart?.items.map((item, index) => {
-                const isLast = index === cart?.items.length - 1;
-                const classes = isLast
-                  ? "p-4"
-                  : "p-4 border-b border-blue-gray-50";
-
+              {cart?.items.map((item) => {
                 return (
                   <tr key={item.foodId}>
                     <td className="p-4 border-b border-blue-gray-50 flex items-center gap-x-2">
@@ -94,6 +114,9 @@ const Checkout = () => {
                         className="w-[70px]"
                       />
                       <span>{item.productName}</span>
+                    </td>
+                    <td className="p-4 border-b border-blue-gray-50">
+                      {item.type}
                     </td>
                     <td className="p-4 border-b border-blue-gray-50">
                       {item.unitPrice} đ
@@ -119,15 +142,21 @@ const Checkout = () => {
               <h1 className="font-medium">Thông tin khác</h1>
             </div>
             <div className="p-3 flex flex-col gap-y-3">
-              <p>
-                <span>Địa chỉ :</span> {checkoutSelector.info.location}
-              </p>
-              <p>
-                <span>phone :</span> {checkoutSelector.info.phone}
-              </p>
-              <p>
-                <span>note :</span> {checkoutSelector.info.note}
-              </p>
+              <Input
+                label="Số điện thoại"
+                type="number"
+                onChange={(e) => setPhone(e.target.value)}
+              ></Input>
+              <Input
+                label="Địa chỉ"
+                type="text"
+                onChange={(e) => setLocation(e.target.value)}
+              ></Input>
+              <Textarea
+                label="Ghi chú"
+                className="h-[185px]"
+                onChange={(e) => setNote(e.target.value)}
+              />
             </div>
           </div>
           <div className="border-borderpri border pb-5 rounded-lg">
@@ -139,7 +168,7 @@ const Checkout = () => {
                 <p className="font-medium text-lg text-gray-500">
                   Tổng đơn hàng
                 </p>
-                <span>{cart?.totalPrice} VND</span>
+                <span>{totalPrice} VND</span>
               </div>
               <div className="flex justify-between">
                 <p className="font-medium text-lg text-gray-500">Giảm giá</p>
@@ -149,7 +178,7 @@ const Checkout = () => {
             </div>
             <div className="p-3 flex justify-between">
               <p className="font-medium text-lg ">Tổng</p>
-              <span>{cart?.totalPrice} VND</span>
+              <span>{totalPrice} VND</span>
             </div>
             <div className="p-3 w-full">
               <div className="mb-6">
@@ -167,6 +196,23 @@ const Checkout = () => {
               </div>
               <Button className="w-full" onClick={CreateOrderHandler}>
                 Thanh toán
+              </Button>
+            </div>
+          </div>
+          <div className="border-borderpri border pb-5 rounded-lg">
+            <div className="p-3 border-b border-borderpri">
+              <h1 className="font-medium">Mã Giảm giá</h1>
+            </div>
+            <div className="p-3 flex flex-col gap-y-3">
+              <Input
+                label="Mã giảm giá"
+                onChange={(e) => setCode(e.target.value)}
+              ></Input>
+              <Button
+                className="bg-blue-500 w-full"
+                onClick={useDiscountHandler}
+              >
+                Sử dụng mã giảm giá
               </Button>
             </div>
           </div>

@@ -4,6 +4,7 @@ using ECO.Application.Repositories;
 using ECO.Application.Services;
 using ECO.DataTable;
 using ECO.Domain.Entites;
+using ECO.Infrastructure.MailHelper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -11,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace ECO.Infrastructure.Services
 {
@@ -21,13 +23,16 @@ namespace ECO.Infrastructure.Services
         protected readonly IJwtService _jwtService;
         private readonly ICartRepository _cartRepository;
         protected readonly IConfiguration _configuration;
+        private readonly IEmailService _emailService;
         private readonly IMapper _mapper;
 
-        public UserService(UserManager<AppUser> userManager, IJwtService jwtService, IConfiguration configuration, IMapper mapper)
+        public UserService(UserManager<AppUser> userManager, IJwtService jwtService, ICartRepository cartRepository, IConfiguration configuration, IEmailService emailService, IMapper mapper)
         {
             _userManager = userManager;
             _jwtService = jwtService;
+            _cartRepository = cartRepository;
             _configuration = configuration;
+            _emailService = emailService;
             _mapper = mapper;
         }
 
@@ -47,14 +52,39 @@ namespace ECO.Infrastructure.Services
             return null;
         }
 
-        public Task ChangePassword(ChangePasswordDTO changePasswordDTO)
+        public async Task ChangePassword(ChangePasswordDTO changePasswordDTO)
         {
-            throw new NotImplementedException();
+            var _user = await _userManager.FindByEmailAsync(changePasswordDTO.Email);
+            if (_user == null || !await _userManager.CheckPasswordAsync(_user, changePasswordDTO.OldPassword))
+            {
+                throw new Exception("Hãy kiểm tra lại mật khẩu hoặc email !!");
+            }
+            if (changePasswordDTO.NewPassword != changePasswordDTO.ConfirmPassword) throw new Exception("Xác nhận mật khẩu không khớp với mật khẩu !");
+
+            await _userManager.ChangePasswordAsync(_user, changePasswordDTO.OldPassword, changePasswordDTO.NewPassword);
+
         }
 
-        public Task ForgetPassword(string email)
+        public async Task ForgetPassword(string email)
         {
-            throw new NotImplementedException();
+            var _user = await _userManager.FindByEmailAsync(email);
+            if (_user == null) throw new Exception("Email không tồn tại !!");
+            var token = await _userManager.GeneratePasswordResetTokenAsync(_user);
+            var resetPasswordLink = "http://localhost:3000/reset-password?token=" + HttpUtility.UrlEncode(token) + "&email=" + HttpUtility.UrlEncode(_user.Email);
+            var emailModel = await GetEmailForResetPassword(email, resetPasswordLink);
+            await _emailService.SendEmailAsync(emailModel);
+        }
+
+        private async Task<MailModel> GetEmailForResetPassword(string emailReceive, string resetpasswordLink)
+        {
+            MailModel result = new MailModel();
+            List<string> emailTos = new List<string>();
+            emailTos.Add(emailReceive);
+            result.Subject = EmailTemplateSubjectConstant.ResetPasswordSubject;
+            string bodyEmail = string.Format(EmailTemplateBodyConstant.ResetPasswordBody, emailReceive, resetpasswordLink);
+            result.Body = bodyEmail + EmailTemplateBodyConstant.SignatureFooter;
+            result.To = emailTos;
+            return await Task.FromResult(result);
         }
 
         public async Task<UserDTO> GetCurrentUser(string id)
@@ -114,6 +144,23 @@ namespace ECO.Infrastructure.Services
         public async Task<UserDTO> GetUserByEmail(string email)
         {
             return _mapper.Map<UserDTO>(await _userManager.FindByEmailAsync(email));
+        }
+
+        public Task UpdateProfile(UserDTO userDTO)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task ResetPassword(ResetPasswordDTO resetPasswordDTO)
+        {
+            var user = await _userManager.FindByEmailAsync(resetPasswordDTO.Email);
+            if (user == null) throw new Exception("Đã xảy ra lỗi , vui lòng thử lại !");
+            if (resetPasswordDTO.Password != resetPasswordDTO.ConfirmPassword) throw new Exception("Nhập lại mật khẩu mới không khớp với mật khẩu đặt lại !");
+            var resetPassResult = await _userManager.ResetPasswordAsync(user, resetPasswordDTO.Token, resetPasswordDTO.Password);
+            if (!resetPassResult.Succeeded)
+            {
+                throw new Exception("Token đã hết hạn !");
+            }
         }
     }
 }

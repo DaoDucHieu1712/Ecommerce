@@ -3,15 +3,21 @@ import AuthService from "../services/AuthService";
 
 export default function useCurrentUser() {
   const [user, setUser] = useState();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState();
 
   const GetCurrentUserHandler = async () => {
-    await AuthService.GetCurrentUser().then((res) => {
-      setUser(res);
-    });
+    setLoading(true);
+    await AuthService.GetCurrentUser()
+      .then((res) => {
+        setUser(res);
+        setLoading(false);
+      })
+      .catch((err) => setError(err.response.data));
   };
   useEffect(() => {
     GetCurrentUserHandler();
   }, []);
 
-  return user;
+  return { user, loading, error };
 }

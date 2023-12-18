@@ -75,11 +75,11 @@ namespace ECO.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateStatus(int id , OrderStatus status)
+        public async Task<IActionResult> UpdateStatus(int id , OrderStatus status, string? reason)
         {
             try
             {
-                await _orderService.UpdateOrderStatus(id, status);
+                await _orderService.UpdateOrderStatus(id, status , reason);
                 return Ok("Update successful !!");
             }
             catch (Exception ex)

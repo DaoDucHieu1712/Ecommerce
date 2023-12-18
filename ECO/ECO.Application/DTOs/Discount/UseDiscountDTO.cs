@@ -9,6 +9,7 @@ namespace ECO.Application.DTOs.Discount
     public class UseDiscountDTO
     {
         public string Massage { get; set; }
+        public int Percent { get; set; }
         public bool IsUse { get; set; }
     }
 }

@@ -12,6 +12,11 @@ import OrderManagerPage from "./app/(admin)/OrderManagerPage";
 import OrderDetailPage from "./app/(admin)/OrderDetailPage";
 import MyOrder from "./app/(auth)/MyOrder";
 import MyOrderDetail from "./app/(auth)/MyOrderDetail";
+import ProfilePage from "./app/(auth)/ProfilePage";
+import ForgotPassword from "./app/(auth)/ForgotPassword";
+import ResetPassword from "./app/(auth)/ResetPassword";
+import ChangePassword from "./app/(auth)/ChangePassword";
+import StatictisPage from "./app/(admin)/StatictisPage";
 const NotFoundPage = lazy(() => import("./app/(public)/NotFoundPage"));
 const AccessDeniedPage = lazy(() => import("./app/(public)/AccessDeniedPage"));
 const HomePage = lazy(() => import("./app/(public)/HomePage"));
@@ -40,8 +45,13 @@ function App() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/my-order" element={<MyOrder />} />
           <Route path="/my-order/:id" element={<MyOrderDetail />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/change-password" element={<ChangePassword />} />
         </Route>
         <Route element={<DashboardLayout />}>
+          <Route path="/admin" element={<StatictisPage />} />
           <Route path="/admin/category" element={<CategoryManagerPage />} />
           <Route path="/admin/product" element={<ProductManagerPage />} />
           <Route path="/admin/discount" element={<DiscountManagerPage />} />

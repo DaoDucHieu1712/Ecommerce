@@ -14,7 +14,7 @@ const MenuLink = [
   },
   {
     name: "Giới thiệu",
-    path: "/about",
+    path: "/",
   },
 ];
 

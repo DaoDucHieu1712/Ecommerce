@@ -103,5 +103,47 @@ namespace ECO.WebApi.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordDTO changePasswordDTO)
+        {
+            try
+            {
+                await _userService.ChangePassword(changePasswordDTO);
+                return Ok();
+            }
+            catch (Exception ex) 
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet("{email}")]
+        public async Task<IActionResult> ForgetPassword(string email)
+        {
+            try
+            {
+                await _userService.ForgetPassword(email);
+                return Ok();
+            }
+            catch (Exception ex) 
+            {
+                return StatusCode(500 ,ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordDTO resetPasswordDTO)
+        {
+            try
+            {
+                await _userService.ResetPassword(resetPasswordDTO);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }

@@ -221,10 +221,14 @@ namespace ECO.Infrastructure.Services
             await _paymentRepository.Update(_payment, "CreatedAt");
         }
 
-        public async Task UpdateOrderStatus(int id, OrderStatus status)
+        public async Task UpdateOrderStatus(int id, OrderStatus status, string? reason)
         {
             var _od = await _orderRepository.FindSingle(x => x.Id == id);
             if (_od == null) throw new Exception("Không tìm thấy Order nào !");
+            if(reason != null)
+            {
+                _od.CancelReason = reason;
+            }
             _od.OrderStatus =status;
             await _orderRepository.Update(_od, "CreatedAt");
         }

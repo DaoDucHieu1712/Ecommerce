@@ -138,7 +138,7 @@ const LoginPage = () => {
           </Typography>
           <Typography color="gray" className="mt-4 text-center font-normal">
             Bạn không nhớ mật khẩu ?{" "}
-            <a href="/forget-password" className="font-medium text-blue-500">
+            <a href="/forgot-password" className="font-medium text-blue-500">
               Quên mật khẩu
             </a>
           </Typography>
