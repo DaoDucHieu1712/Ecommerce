@@ -4,9 +4,10 @@ import {
   Card,
   Input,
   Radio,
+  Spinner,
   Typography,
 } from "@material-tailwind/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import ErrorText from "../../shared/components/text/ErrorText";
@@ -33,92 +34,108 @@ const ProfilePage = () => {
 
   const UpdateProfileHandler = async () => {};
 
+  if (!user) {
+    return <p>Loading...</p>;
+  }
+
   return (
-    <div className="flex items-center justify-center">
-      <Card color="transparent" shadow={false} className="p-10">
-        <Typography variant="h4" color="blue-gray">
-          Trang cá nhân
-        </Typography>
-        <Typography color="gray" className="mt-1 font-normal">
-          Thông tin của tôi
-        </Typography>
-        {/* <p className="text-sm text-red-500">{error && error}</p> */}
-        <form
-          className="mt-8 mb-2"
-          onSubmit={handleSubmit(UpdateProfileHandler)}
-        >
-          <div className="mb-1 flex flex-col gap-6">
-            <div className="flex gap-x-2">
-              <div className="div">
-                <Input
-                  size="md"
-                  label="Họ"
-                  defaultValue={user?.firstName}
-                  {...register("firstName")}
-                />
-                {errors.firstName && (
-                  <ErrorText text={errors.firstName.message} />
-                )}
+    <>
+      {!user ? (
+        <Spinner />
+      ) : (
+        <div className="flex items-center justify-center">
+          <Card color="transparent" shadow={false} className="p-10">
+            <Typography variant="h4" color="blue-gray">
+              Trang cá nhân
+            </Typography>
+            <Typography color="gray" className="mt-1 font-normal">
+              Thông tin của tôi
+            </Typography>
+            {/* <p className="text-sm text-red-500">{error && error}</p> */}
+            <form
+              className="mt-8 mb-2"
+              onSubmit={handleSubmit(UpdateProfileHandler)}
+            >
+              <div className="mb-1 flex flex-col gap-6">
+                <div className="flex gap-x-2">
+                  <div className="div">
+                    <Input
+                      size="md"
+                      label="Họ"
+                      defaultValue={user.firstName}
+                      {...register("firstName")}
+                    />
+                    {errors.firstName && (
+                      <ErrorText text={errors.firstName.message} />
+                    )}
+                  </div>
+                  <div className="">
+                    <Input
+                      size="md"
+                      label="Tên"
+                      defaultValue={user.lastName}
+                      {...register("lastName")}
+                    />
+                    {errors.lastName && (
+                      <ErrorText text={errors.lastName.message} />
+                    )}
+                  </div>
+                </div>
+                <div className="flex gap-10">
+                  <Radio
+                    name="type"
+                    label="Nam"
+                    value={true}
+                    defaultChecked={user.gender === true}
+                    {...register("gender")}
+                  />
+                  <Radio
+                    name="type"
+                    label="Nữ"
+                    value={false}
+                    defaultChecked={user.gender === false}
+                    {...register("gender")}
+                  />
+                  {errors.gender && <ErrorText text={errors.gender.message} />}
+                </div>
+                <div className="div">
+                  <Input
+                    type="date"
+                    size="md"
+                    label="Ngày sinh"
+                    defaultValue={user.birthDay}
+                    {...register("birthDay")}
+                  />
+                  <p className="my-3">
+                    Ngay sinh : {user.birthDay.slice(0, 10)}
+                  </p>
+
+                  {errors.birthDay && (
+                    <ErrorText text={errors.birthDay.message} />
+                  )}
+                </div>
+                <div className="div">
+                  <Input
+                    type="text"
+                    size="md"
+                    label="Số điện thoại"
+                    className=""
+                    {...register("phoneNumber")}
+                    defaultValue={user.phoneNumber}
+                  />
+                  {errors.phoneNumber && (
+                    <ErrorText text={errors.phoneNumber.message} />
+                  )}
+                </div>
               </div>
-              <div className="">
-                <Input
-                  size="md"
-                  label="Tên"
-                  defaultValue={user?.lastName}
-                  {...register("lastName")}
-                />
-                {errors.lastName && (
-                  <ErrorText text={errors.lastName.message} />
-                )}
-              </div>
-            </div>
-            <div className="flex gap-10">
-              <Radio
-                name="type"
-                label="Nam"
-                value={true}
-                defaultChecked={user?.gender === true}
-                {...register("gender")}
-              />
-              <Radio
-                name="type"
-                label="Nữ"
-                value={false}
-                defaultChecked={user?.gender === false}
-                {...register("gender")}
-              />
-              {errors.gender && <ErrorText text={errors.gender.message} />}
-            </div>
-            <div className="div">
-              <Input
-                type="date"
-                size="md"
-                label="Ngày sinh"
-                defaultValue={user?.birthDay}
-                {...register("birthDay")}
-              />
-              {errors.birthDay && <ErrorText text={errors.birthDay.message} />}
-            </div>
-            <div className="div">
-              <Input
-                type="text"
-                size="md"
-                label="Số điện thoại"
-                className=""
-                {...register("phoneNumber")}
-                defaultValue={user?.phoneNumber}
-              />
-              {errors.phoneNumber && (
-                <ErrorText text={errors.phoneNumber.message} />
-              )}
-            </div>
-          </div>
-          <Button type="submit" className="mt-6" fullWidth>
-            Cập nhật
-          </Button>
-        </form>
-      </Card>
-    </div>
+              <Button type="submit" className="mt-6" fullWidth>
+                Cập nhật
+              </Button>
+            </form>
+          </Card>
+        </div>
+      )}
+    </>
   );
 };
 

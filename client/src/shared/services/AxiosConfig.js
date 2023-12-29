@@ -38,6 +38,10 @@ instance.interceptors.response.use(
     if (error?.response?.status === 403 && !prevRequest.sent) {
       window.location.href = "/access-denied";
     }
+
+    if (error?.response?.status === 404 && !prevRequest.sent) {
+      window.location.href = "/not-found";
+    }
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
     return Promise.reject(error);

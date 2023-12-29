@@ -9,6 +9,10 @@ const DashboardService = {
     const url = "/api/Dashboard/GetChartPrice/" + year;
     return axiosConfig.get(url);
   },
+  async GetOrderStatictis() {
+    const url = "/api/Dashboard/GetOrderStatistic";
+    return axiosConfig.get(url);
+  },
 };
 
 export default DashboardService;

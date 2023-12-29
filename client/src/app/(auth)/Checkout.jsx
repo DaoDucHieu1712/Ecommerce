@@ -7,7 +7,6 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import useCart from "../../shared/hooks/useCart";
 import OrderService from "../../shared/services/OrderService";
 import CartService from "../../shared/services/CartService";
@@ -59,7 +58,9 @@ const Checkout = () => {
       .then(async (res) => {
         toast.success("Đặt hàng thành công !");
         await CartService.ClearCart();
-        await DiscountService.UseDiscount(code);
+        if (code) {
+          await DiscountService.UseDiscount(code);
+        }
         navigate("/");
       })
       .catch((err) => {

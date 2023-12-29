@@ -36,6 +36,8 @@ namespace ECO.Infrastructure
             services.AddScoped<ICartService, CartService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IDashboardService, DashboardService>();
+            services.AddScoped<IVnPayService, VnPayService>();
+
             return services;
         }
 

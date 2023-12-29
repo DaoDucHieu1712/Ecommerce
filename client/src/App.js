@@ -17,6 +17,10 @@ import ForgotPassword from "./app/(auth)/ForgotPassword";
 import ResetPassword from "./app/(auth)/ResetPassword";
 import ChangePassword from "./app/(auth)/ChangePassword";
 import StatictisPage from "./app/(admin)/StatictisPage";
+import ReportPage from "./app/(admin)/ReportPage";
+import DashboardLogin from "./app/(admin)/DashboardLogin";
+import LoginManager from "./app/(public)/LoginManager";
+import PaymentCallBack from "./app/(auth)/PaymentCallBack";
 const NotFoundPage = lazy(() => import("./app/(public)/NotFoundPage"));
 const AccessDeniedPage = lazy(() => import("./app/(public)/AccessDeniedPage"));
 const HomePage = lazy(() => import("./app/(public)/HomePage"));
@@ -38,6 +42,7 @@ function App() {
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/login-dashboard" element={<LoginManager />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/shop" element={<ShopPage />} />
           <Route path="/shop/product/:id" element={<ProductDetail />} />
@@ -49,9 +54,11 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/change-password" element={<ChangePassword />} />
+          <Route path="/payment-callback" element={<PaymentCallBack />} />
         </Route>
         <Route element={<DashboardLayout />}>
           <Route path="/admin" element={<StatictisPage />} />
+          <Route path="/admin/report" element={<ReportPage />} />
           <Route path="/admin/category" element={<CategoryManagerPage />} />
           <Route path="/admin/product" element={<ProductManagerPage />} />
           <Route path="/admin/discount" element={<DiscountManagerPage />} />

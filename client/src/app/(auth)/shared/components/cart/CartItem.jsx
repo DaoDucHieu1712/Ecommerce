@@ -1,12 +1,15 @@
 import React from "react";
 import DeleteIcon from "../../../../../shared/components/icon/DeleteIcon";
 import CartService from "../../../../../shared/services/CartService";
+import { toast } from "react-toastify";
 
 const CartItem = ({ item, reload }) => {
   const InscreaseQuantityHandler = async () => {
-    await CartService.IncreaseQuantity(item.id).then((res) => {
-      reload();
-    });
+    await CartService.IncreaseQuantity(item.id)
+      .then((res) => {
+        reload();
+      })
+      .catch((err) => toast.error(err.response.data));
   };
 
   const DescreaseQuantityHandler = async () => {

@@ -29,8 +29,7 @@ const schema = yup.object({
     .required("Vui lòng điền mật khẩu !"),
 });
 
-const LoginPage = () => {
-  const [term, setTerm] = useState(false);
+const DashboardLogin = () => {
   const [error, setError] = useState();
   const {
     register,
@@ -55,7 +54,7 @@ const LoginPage = () => {
           dayjs().add(7, "day").toDate()
         );
         toast.success("Đăng nhập thành công !!");
-        window.location.href = "/";
+        window.location.href = "/admin";
       })
       .catch((err) => {
         setError(err.response.data);
@@ -69,7 +68,7 @@ const LoginPage = () => {
           Đăng nhập
         </Typography>
         <Typography color="gray" className="mt-1 font-normal">
-          Chào bạn đến với Degrey Shop !!
+          Đăng nhập tới trang quản lý
         </Typography>
         <p className="text-red-500 text-sm">{error && error}</p>
         <form
@@ -109,41 +108,13 @@ const LoginPage = () => {
               {errors.password && <ErrorText text={errors.password.message} />}
             </div>
           </div>
-          <Checkbox
-            label={
-              <Typography
-                variant="small"
-                color="gray"
-                className="flex items-center font-normal"
-              >
-                Bạn đồng ý
-                <p className="font-medium transition-colors hover:text-gray-900">
-                  &nbsp;với điều khoản của chúng tôi !
-                </p>
-              </Typography>
-            }
-            containerProps={{ className: "-ml-2.5" }}
-            onClick={() => setTerm(!term)}
-          />
-          <Button type="submit" className="mt-6" disabled={!term} fullWidth>
+          <Button type="submit" className="mt-6" fullWidth>
             Đăng nhập
           </Button>
-          <Typography color="gray" className="mt-4 text-center font-normal">
-            Bạn chưa có tài khoản ?{" "}
-            <a href="/register" className="font-medium text-blue-500">
-              Đăng ký
-            </a>
-          </Typography>
-          <Typography color="gray" className="mt-4 text-center font-normal">
-            Bạn không nhớ mật khẩu ?{" "}
-            <a href="/forgot-password" className="font-medium text-blue-500">
-              Quên mật khẩu
-            </a>
-          </Typography>
         </form>
       </Card>
     </div>
   );
 };
 
-export default LoginPage;
+export default DashboardLogin;

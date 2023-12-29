@@ -13,5 +13,6 @@ namespace ECO.Application.Services
 
         Task<List<RevenuePerMonth>> GetChartTotalPriceByMonth(int year);
         Task<List<CategoryStatictis>> GetCategoryStatictis();
+        Task<List<OrderStatistic>> GetOrderStatistics();
     }
 }

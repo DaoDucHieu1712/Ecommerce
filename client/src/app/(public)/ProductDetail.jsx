@@ -37,12 +37,13 @@ const ProductDetail = () => {
       unitPrice: productQuery.data?.price,
       cartId: cart?.id,
     };
+
     await CartService.AddToCart(data)
       .then(() => {
         toast("Đã thêm vào giỏ hàng thành công !!");
       })
-      .catch(() => {
-        toast.error("Đã có lỗi xảy ra , vui lòng thử lại !");
+      .catch((err) => {
+        toast.error(err.response.data);
       });
   };
 

@@ -20,13 +20,15 @@ namespace ECO.Infrastructure.Services
     {
 
         private readonly IOrderRepository _orderRepository;
+        private readonly IInventoryRepository _inventoryRepository;
         private readonly IOrderDetailRepository _orderDetailRepository;
         private readonly IPaymentRepository _paymentRepository;
         private readonly IMapper _mapper;
 
-        public OrderService(IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, IPaymentRepository paymentRepository, IMapper mapper)
+        public OrderService(IOrderRepository orderRepository, IInventoryRepository inventoryRepository, IOrderDetailRepository orderDetailRepository, IPaymentRepository paymentRepository, IMapper mapper)
         {
             _orderRepository = orderRepository;
+            _inventoryRepository = inventoryRepository;
             _orderDetailRepository = orderDetailRepository;
             _paymentRepository = paymentRepository;
             _mapper = mapper;
@@ -35,6 +37,12 @@ namespace ECO.Infrastructure.Services
         public async Task Add(OrderRequestDTO entity)
         {
             await _orderRepository.Add(_mapper.Map<Order>(entity));
+            foreach (var item in entity.OrderDetails)
+            {
+                var _inventory = await _inventoryRepository.FindSingle(x => x.Id == item.InventoryId);
+                _inventory.Quantity = _inventory.Quantity - item.Quantity;
+                await _inventoryRepository.Update(_inventory, "CreatedAt");
+            }
         }
 
         public async Task<Payment> CreateAndGetPayment(Payment payment)
@@ -63,7 +71,7 @@ namespace ECO.Infrastructure.Services
 
         public async Task<EntityFilterDTO<OrderResponseDTO>> GetAllOrder(OrderFilterDTO orderFilterDTO)
         {
-            var query = _orderRepository.FindAll(x => x.Payment, x=>x.Customer);
+            var query = _orderRepository.FindAll(x => x.Payment, x => x.Customer);
 
             if (orderFilterDTO.SortType != null)
             {
@@ -138,7 +146,7 @@ namespace ECO.Infrastructure.Services
 
         public async Task<EntityFilterDTO<OrderResponseDTO>> MyOrder(string id, OrderFilterDTO orderFilterDTO)
         {
-            var query = _orderRepository.FindAll(x => x.CustomerId == id, x=>x.Payment, x => x.Customer);
+            var query = _orderRepository.FindAll(x => x.CustomerId == id, x => x.Payment, x => x.Customer);
 
             if (orderFilterDTO.SortType != null)
             {
@@ -214,7 +222,7 @@ namespace ECO.Infrastructure.Services
         public async Task UpdateOrderPayment(int id, PaymentStatus status)
         {
             var _od = await _orderRepository.FindSingle(x => x.Id == id);
-            if(_od == null) throw new Exception("Không tìm thấy Order nào !");
+            if (_od == null) throw new Exception("Không tìm thấy Order nào !");
             var _payment = await _paymentRepository.FindSingle(x => x.Id == _od.PaymentId);
             if (_payment == null) throw new Exception("Không tìm thấy Payment nào !");
             _payment.Status = status;
@@ -225,11 +233,29 @@ namespace ECO.Infrastructure.Services
         {
             var _od = await _orderRepository.FindSingle(x => x.Id == id);
             if (_od == null) throw new Exception("Không tìm thấy Order nào !");
-            if(reason != null)
+
+            if (status == OrderStatus.Completed)
+            {
+                await UpdateOrderPayment(id, PaymentStatus.Success);
+            }
+
+            if(status == OrderStatus.Rejected)
+            {
+                var _oddt = await _orderDetailRepository.FindAll(x => x.OrderId == id).ToListAsync();
+                foreach (var item in _oddt)
+                {
+                    var _inventory = await _inventoryRepository.FindSingle(x => x.Id == item.InventoryId);
+                    _inventory.Quantity = _inventory.Quantity + item.Quantity;
+                    await _inventoryRepository.Update(_inventory, "CreatedAt");
+                }
+            }
+
+            if (reason != null)
             {
                 _od.CancelReason = reason;
             }
-            _od.OrderStatus =status;
+
+            _od.OrderStatus = status;
             await _orderRepository.Update(_od, "CreatedAt");
         }
     }

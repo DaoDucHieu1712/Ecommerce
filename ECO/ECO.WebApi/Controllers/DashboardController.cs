@@ -55,6 +55,19 @@ namespace ECO.WebApi.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetOrderStatistic()
+        {
+            try
+            {
+                return Ok(await _dashboardService.GetOrderStatistics());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
 
 
     }

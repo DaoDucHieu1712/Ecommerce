@@ -1,6 +1,8 @@
 ﻿using ECO.Application.DTOs.Dashboard;
 using ECO.Application.Repositories;
 using ECO.Application.Services;
+using ECO.Domain.Enums;
+using ECO.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -17,14 +19,16 @@ namespace ECO.Infrastructure.Services
         private readonly ICategoryRepository _categoryRepository;
         private readonly IOrderDetailRepository _orderDetailRepository;
         private readonly IOrderRepository _orderRepository;
+        private readonly ECOContext _context;
 
-        public DashboardService(IProductRepository productRepository, IInventoryRepository inventoryRepository, ICategoryRepository categoryRepository, IOrderDetailRepository orderDetailRepository, IOrderRepository orderRepository)
+        public DashboardService(IProductRepository productRepository, IInventoryRepository inventoryRepository, ICategoryRepository categoryRepository, IOrderDetailRepository orderDetailRepository, IOrderRepository orderRepository, ECOContext context)
         {
             _productRepository = productRepository;
             _inventoryRepository = inventoryRepository;
             _categoryRepository = categoryRepository;
             _orderDetailRepository = orderDetailRepository;
             _orderRepository = orderRepository;
+            _context = context;
         }
 
         public async Task<List<RevenuePerMonth>> GetChartTotalPriceByMonth(int year)
@@ -68,7 +72,7 @@ namespace ECO.Infrastructure.Services
                 OrderCount = orders.Count,
                 CategoryCount = categories.Count,
                 InventoryCount = inventories.Count,
-
+                UserCount = _context.AppUsers.Count(),
             };
         }
 
@@ -91,6 +95,35 @@ namespace ECO.Infrastructure.Services
 
 
             return categoryOrder;
+        }
+
+        public async Task<List<OrderStatistic>> GetOrderStatistics()
+        {
+            var orderCount = _orderRepository.FindAll().Count();
+            List<OrderStatistic> list = new List<OrderStatistic>();
+
+            list.Add(new OrderStatistic
+            {
+                Status = "Đang chờ",
+                Percent = (double)_orderRepository.FindAll(x => x.OrderStatus == OrderStatus.Idel).Count() / (double)orderCount *100
+            });
+            list.Add(new OrderStatistic
+            {
+                Status = "Đang giao",
+                Percent = (double)_orderRepository.FindAll(x => x.OrderStatus == OrderStatus.Pending).Count() / (double)orderCount *100
+            }); 
+            list.Add(new OrderStatistic
+            {
+                Status = "Đã giao hàng",
+                Percent =(double) _orderRepository.FindAll(x => x.OrderStatus == OrderStatus.Completed).Count() / (double) orderCount *100
+            }); 
+            list.Add(new OrderStatistic
+            {
+                Status = "Đã hủy",
+                Percent = (double)_orderRepository.FindAll(x => x.OrderStatus == OrderStatus.Rejected).Count() / (double)orderCount *100
+            });
+
+            return list;
         }
     }
 }

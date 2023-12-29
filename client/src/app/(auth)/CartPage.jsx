@@ -1,18 +1,9 @@
-import React, { useEffect, useState } from "react";
-import CartItem from "./shared/components/cart/CartItem";
-import {
-  Button,
-  Card,
-  Input,
-  Option,
-  Select,
-  Textarea,
-  Typography,
-} from "@material-tailwind/react";
-import useCart from "../../shared/hooks/useCart";
+import { Button, Card, Typography } from "@material-tailwind/react";
+import React from "react";
 import { useDispatch } from "react-redux";
-import { checkoutActions } from "../../redux/checkoutSlice";
 import { Link } from "react-router-dom";
+import useCart from "../../shared/hooks/useCart";
+import CartItem from "./shared/components/cart/CartItem";
 
 const TABLE_HEAD = [
   "SẢN PHẨM",
@@ -121,7 +112,11 @@ const CartPage = () => {
             <Link to="/shop">
               <Button className="w-full">Mua hàng tiếp !</Button>
             </Link>
-            <Button className="w-full" onClick={CheckoutHandler}>
+            <Button
+              className="w-full"
+              onClick={CheckoutHandler}
+              disabled={cart?.items?.length === 0}
+            >
               Thanh toán
             </Button>
           </div>

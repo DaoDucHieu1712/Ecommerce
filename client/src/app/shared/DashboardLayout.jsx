@@ -22,6 +22,7 @@ import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import Logo from "../../assets/DegreyLogo.webp";
 import React from "react";
 import { Link, Outlet } from "react-router-dom";
+import CookieService from "../../shared/helpers/CookieHelper";
 
 const DashboardLayout = () => {
   const [open, setOpen] = React.useState(0);
@@ -65,24 +66,30 @@ const DashboardLayout = () => {
               </ListItem>
               <AccordionBody className="py-1">
                 <List className="p-0">
-                  <ListItem>
-                    <ListItemPrefix>
-                      <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                    </ListItemPrefix>
-                    Thống kê
-                  </ListItem>
-                  <ListItem>
-                    <ListItemPrefix>
-                      <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                    </ListItemPrefix>
-                    Báo cáo
-                  </ListItem>
-                  <ListItem>
-                    <ListItemPrefix>
-                      <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                    </ListItemPrefix>
-                    Projects
-                  </ListItem>
+                  <Link to="/admin">
+                    <ListItem>
+                      <ListItemPrefix>
+                        <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                      </ListItemPrefix>
+                      Thống kê
+                    </ListItem>
+                  </Link>
+                  <Link to="/admin/report">
+                    <ListItem>
+                      <ListItemPrefix>
+                        <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                      </ListItemPrefix>
+                      Báo cáo
+                    </ListItem>
+                  </Link>
+                  <Link to="/admin/user">
+                    <ListItem>
+                      <ListItemPrefix>
+                        <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                      </ListItemPrefix>
+                      Người dùng
+                    </ListItem>
+                  </Link>
                 </List>
               </AccordionBody>
             </Accordion>
@@ -144,14 +151,6 @@ const DashboardLayout = () => {
                       Quản lý đơn hàng
                     </ListItem>
                   </Link>
-                  <Link to="/admin/user">
-                    <ListItem>
-                      <ListItemPrefix>
-                        <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                      </ListItemPrefix>
-                      Quản lý người dùng
-                    </ListItem>
-                  </Link>
                 </List>
               </AccordionBody>
             </Accordion>
@@ -193,7 +192,7 @@ const DashboardLayout = () => {
         </Card>
         <section className="w-full">
           <div className="flex justify-end border-b p-4">
-            <h1>Welcome Dao Duc Hieu</h1>
+            <h1>Welcome {CookieService.getCookie("eco_v1_username")}</h1>
           </div>
           <div className="p-3">
             <Outlet></Outlet>

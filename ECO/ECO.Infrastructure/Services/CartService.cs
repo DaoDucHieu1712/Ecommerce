@@ -17,12 +17,14 @@ namespace ECO.Infrastructure.Services
     {
 
         private readonly ICartRepository _cartRepository;
+        private readonly IInventoryRepository _inventoryRepository;
         private readonly ICartItemRepository _cartItemRepository;
         private readonly IMapper _mapper;
 
-        public CartService(ICartRepository cartRepository, ICartItemRepository cartItemRepository, IMapper mapper)
+        public CartService(ICartRepository cartRepository, IInventoryRepository inventoryRepository, ICartItemRepository cartItemRepository, IMapper mapper)
         {
             _cartRepository = cartRepository;
+            _inventoryRepository = inventoryRepository;
             _cartItemRepository = cartItemRepository;
             _mapper = mapper;
         }
@@ -39,8 +41,11 @@ namespace ECO.Infrastructure.Services
                 && x.CartId == cartItemRequestDTO.CartId 
                 && x.InventoryId == cartItemRequestDTO.InventoryId);
 
+            var _inventory = await _inventoryRepository.FindSingle(x => x.Id == cartItemRequestDTO.InventoryId);
+
             if (check != null)
             {
+                if (_inventory.Quantity == check.Quantity) throw new Exception("Không thể mua quá số lượng của sản phẩm !!");
                 check.Quantity = check.Quantity + 1;
                 await _cartItemRepository.Update(check, "CreatedAt");
             }
@@ -98,6 +103,8 @@ namespace ECO.Infrastructure.Services
         public async Task IncreaseQuantityCartItem(int itemid)
         {
             var CartItem = await _cartItemRepository.FindSingle(x => x.Id == itemid);
+            var _inventory = await _inventoryRepository.FindSingle(x => x.Id == CartItem.InventoryId);
+            if (_inventory.Quantity == CartItem.Quantity) throw new Exception("Không thể mua quá số lượng của sản phẩm !!");
             CartItem.Quantity = CartItem.Quantity + 1;
             await _cartItemRepository.Update(CartItem, "CreatedAt");
         }

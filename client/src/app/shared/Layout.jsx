@@ -14,7 +14,7 @@ const MenuLink = [
   },
   {
     name: "Giới thiệu",
-    path: "/",
+    path: "/about",
   },
 ];
 
@@ -53,7 +53,7 @@ const Layout = () => {
                   } py-6`
                 }
               >
-                Giỏ hàng(9)
+                Giỏ hàng
               </NavLink>
             </div>
             <div className="flex justify-end items-center gap-x-3">

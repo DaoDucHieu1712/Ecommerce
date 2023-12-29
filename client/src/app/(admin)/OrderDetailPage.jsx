@@ -6,6 +6,7 @@ import { Button, Spinner } from "@material-tailwind/react";
 import OrderItem from "./shared/components/order/OrderItem";
 import OrderStatus from "../../shared/components/status/OrderStatus";
 import { toast } from "react-toastify";
+import PaymentStatus from "../../shared/components/status/PaymentStatus";
 
 const OrderDetailPage = () => {
   const { id } = useParams();
@@ -102,23 +103,46 @@ const OrderDetailPage = () => {
               </p>
             </div>
           </ul>
+          <ul className="info">
+            <div className="flex justify-between gap-y-2 flex-col border-b pb-3 border-gray-200">
+              <p className="font-bold text-lg">Phương thức thanh toán : </p>
+              <p className="font-medium text-sm">
+                {orderQuery.data?.paymentMethod === 1
+                  ? "Thanh toán khi nhận hàng"
+                  : "Chuyển khoản"}
+                <div className="">
+                  <PaymentStatus status={orderQuery.data?.paymentStatus} />
+                </div>
+              </p>
+            </div>
+          </ul>
           <div className="mt-3 border-gray-700  text-black rounded-md">
             <p className="font-bold text-lg">Ghi chú :</p>
             <p>{orderQuery.data?.note}</p>
           </div>
           <div className="flex flex-col gap-y-2 mt-3">
-            <Button size="sm" color="green" onClick={OrderSuccessHandler}>
+            <Button
+              size="sm"
+              color="green"
+              onClick={OrderSuccessHandler}
+              disabled={orderQuery.data?.orderStatus !== 2}
+            >
               Xác nhận giao hàng thành công
             </Button>
             <Button
               size="sm"
               color="orange"
-              disabled={orderQuery.data?.status === 2}
+              disabled={orderQuery.data?.orderStatus !== 1}
               onClick={OrderPendingHandler}
             >
               Xác nhận đơn hàng
             </Button>
-            <Button size="sm" color="red" onClick={OrderRejectHandler}>
+            <Button
+              size="sm"
+              color="red"
+              onClick={OrderRejectHandler}
+              disabled={orderQuery.data?.orderStatus !== 2}
+            >
               Hủy đơn hàng
             </Button>
           </div>

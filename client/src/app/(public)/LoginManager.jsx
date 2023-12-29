@@ -29,7 +29,7 @@ const schema = yup.object({
     .required("Vui lòng điền mật khẩu !"),
 });
 
-const LoginPage = () => {
+const LoginManager = () => {
   const [term, setTerm] = useState(false);
   const [error, setError] = useState();
   const {
@@ -55,7 +55,7 @@ const LoginPage = () => {
           dayjs().add(7, "day").toDate()
         );
         toast.success("Đăng nhập thành công !!");
-        window.location.href = "/";
+        window.location.href = "/admin";
       })
       .catch((err) => {
         setError(err.response.data);
@@ -69,7 +69,7 @@ const LoginPage = () => {
           Đăng nhập
         </Typography>
         <Typography color="gray" className="mt-1 font-normal">
-          Chào bạn đến với Degrey Shop !!
+          Chào bạn đến trang quản lý Degrey Shop !
         </Typography>
         <p className="text-red-500 text-sm">{error && error}</p>
         <form
@@ -79,7 +79,7 @@ const LoginPage = () => {
           <div className="mb-1 flex flex-col gap-3">
             <div className="mb-1 flex flex-col gap-6">
               <Typography variant="h6" color="blue-gray" className="-mb-3">
-                Email của bạn
+                Email
               </Typography>
               <Input
                 size="lg"
@@ -128,22 +128,10 @@ const LoginPage = () => {
           <Button type="submit" className="mt-6" disabled={!term} fullWidth>
             Đăng nhập
           </Button>
-          <Typography color="gray" className="mt-4 text-center font-normal">
-            Bạn chưa có tài khoản ?{" "}
-            <a href="/register" className="font-medium text-blue-500">
-              Đăng ký
-            </a>
-          </Typography>
-          <Typography color="gray" className="mt-4 text-center font-normal">
-            Bạn không nhớ mật khẩu ?{" "}
-            <a href="/forgot-password" className="font-medium text-blue-500">
-              Quên mật khẩu
-            </a>
-          </Typography>
         </form>
       </Card>
     </div>
   );
 };
 
-export default LoginPage;
+export default LoginManager;
