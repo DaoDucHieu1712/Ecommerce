@@ -25,7 +25,7 @@ namespace ECO.Domain.Entites
         public OrderStatus OrderStatus { get; set; }
         public int? PaymentId { get; set; }
         [ForeignKey(nameof(PaymentId))]
-        public Payment Payment { get; set; }
+        public Payment? Payment { get; set; }
         [ForeignKey(nameof(CustomerId))]
         public AppUser Customer { get; set; }
         public ICollection<OrderDetail> OrderDetails { get; set; }

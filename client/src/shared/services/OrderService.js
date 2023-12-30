@@ -13,10 +13,19 @@ const OrderService = {
     const url = `/api/Order/UpdateStatus/${id}?status=${status}&reason=${reason}`;
     return axiosConfig.put(url);
   },
-  async UpdatePayment(id, status) {
-    const url = `/api/Order/UpdatePaymentStatus/${id}?status=${status}`;
+  // async UpdatePayment(id, status) {
+  //   const url = `/api/Order/UpdatePaymentStatus/${id}?status=${status}`;
+  //   return axiosConfig.put(url);
+  // },
+  async UpdatePayment(id, method, status) {
+    const url = `/api/Order/UpdatePayment/${id}?method=${method}&status=${status}`;
     return axiosConfig.put(url);
   },
+  async CreatePayment(data) {
+    const url = `/api/Order/GetUrlPayment`;
+    return axiosConfig.post(url, data);
+  },
+
   async GetAllOrder(ctx) {
     const url =
       `/api/Order/GetAllOrder?` +

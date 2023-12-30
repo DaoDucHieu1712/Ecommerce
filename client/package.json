@@ -25,6 +25,7 @@
     "react-toastify": "^9.1.3",
     "sass": "^1.69.5",
     "universal-cookie": "^6.1.1",
+    "uuid": "^9.0.1",
     "web-vitals": "^2.1.4",
     "yup": "^1.3.2"
   },

@@ -22,7 +22,7 @@ namespace ECO.Application.DTOs.Orders
         public string? Note { get; set; }
         public OrderStatus OrderStatus { get; set; }
         public int? PaymentId { get; set; }
-        public Payment Payment { get; set; }
+        public Payment? Payment { get; set; }
         public List<OrderDetailRequestDTO> OrderDetails { get; set; }
     }
 }

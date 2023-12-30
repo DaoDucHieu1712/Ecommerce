@@ -18,9 +18,9 @@ import ResetPassword from "./app/(auth)/ResetPassword";
 import ChangePassword from "./app/(auth)/ChangePassword";
 import StatictisPage from "./app/(admin)/StatictisPage";
 import ReportPage from "./app/(admin)/ReportPage";
-import DashboardLogin from "./app/(admin)/DashboardLogin";
 import LoginManager from "./app/(public)/LoginManager";
-import PaymentCallBack from "./app/(auth)/PaymentCallBack";
+import PaymentSuccess from "./app/(auth)/PaymentSuccess";
+import PaymentFail from "./app/(auth)/PaymentFail";
 const NotFoundPage = lazy(() => import("./app/(public)/NotFoundPage"));
 const AccessDeniedPage = lazy(() => import("./app/(public)/AccessDeniedPage"));
 const HomePage = lazy(() => import("./app/(public)/HomePage"));
@@ -54,7 +54,8 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/change-password" element={<ChangePassword />} />
-          <Route path="/payment-callback" element={<PaymentCallBack />} />
+          <Route path="/payment-success" element={<PaymentSuccess />} />
+          <Route path="/payment-fail" element={<PaymentFail />} />
         </Route>
         <Route element={<DashboardLayout />}>
           <Route path="/admin" element={<StatictisPage />} />

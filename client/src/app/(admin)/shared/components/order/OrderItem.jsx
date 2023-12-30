@@ -13,6 +13,7 @@ const OrderItem = ({ item }) => {
           <div className="flex flex-col gap-y-1 text-sm">
             <p className="font-bold w-[300px]">{item.productName}</p>
             <p>{item.unitPrice} VND</p>
+            <p>Kiểu loại : {item.type}</p>
           </div>
         </div>
         <div className="flex flex-col gap-y-3">

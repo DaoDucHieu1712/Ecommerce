@@ -45,6 +45,19 @@ namespace ECO.Infrastructure.Services
             }
         }
 
+        public async Task<OrderResponseDTO> CreateAndGet(OrderRequestDTO orderRequestDTO)
+        {
+           var _od = await _orderRepository.CreateAndGetEntity(_mapper.Map<Order>(orderRequestDTO));
+            foreach (var item in orderRequestDTO.OrderDetails)
+            {
+                var _inventory = await _inventoryRepository.FindSingle(x => x.Id == item.InventoryId);
+                _inventory.Quantity = _inventory.Quantity - item.Quantity;
+                await _inventoryRepository.Update(_inventory, "CreatedAt");
+            }
+            return _mapper.Map<OrderResponseDTO>(_od);
+
+        }
+
         public async Task<Payment> CreateAndGetPayment(Payment payment)
         {
             return await _paymentRepository.CreateAndGetEntity(payment);
@@ -217,6 +230,17 @@ namespace ECO.Infrastructure.Services
         public Task Update(OrderRequestDTO entity)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task UpdatePayment(int id, PaymentMethod method , PaymentStatus status)
+        {
+            var _od = await _orderRepository.FindSingle(x => x.Id == id);
+            if (_od == null) throw new Exception("Không tìm thấy Order nào !");
+            var _payment = await _paymentRepository.FindSingle(x => x.Id == _od.PaymentId);
+            if (_payment == null) throw new Exception("Không tìm thấy Payment nào !");
+            _payment.Method = method;
+            _payment.Status = status;
+            await _paymentRepository.Update(_payment, "CreatedAt");
         }
 
         public async Task UpdateOrderPayment(int id, PaymentStatus status)

@@ -10,5 +10,6 @@ namespace ECO.Application.DTOs.Auth
     {
         public string UserName { get; set; }
         public string Token { get; set; }
+        public string RedirectUrl { get; set; }
     }
 }

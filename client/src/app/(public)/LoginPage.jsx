@@ -55,7 +55,7 @@ const LoginPage = () => {
           dayjs().add(7, "day").toDate()
         );
         toast.success("Đăng nhập thành công !!");
-        window.location.href = "/";
+        window.location.href = res.redirectUrl;
       })
       .catch((err) => {
         setError(err.response.data);

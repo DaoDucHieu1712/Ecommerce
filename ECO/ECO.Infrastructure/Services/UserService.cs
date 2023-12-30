@@ -112,11 +112,16 @@ namespace ECO.Infrastructure.Services
             }
 
             var roles = await _userManager.GetRolesAsync(user);
-
+            var url = "/";
+            if (roles[0] == "Admin" || roles[0] == "Staff")
+            {
+                url = "/admin";
+            }
             return new UserToken()
             {
                 UserName = user.UserName,
                 Token = await _jwtService.GenerateUserTokenAsync(user),
+                RedirectUrl = url
             };
         }
 

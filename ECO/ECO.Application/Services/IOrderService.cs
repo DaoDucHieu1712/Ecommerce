@@ -13,10 +13,12 @@ namespace ECO.Application.Services
     public interface IOrderService : IBaseService<OrderResponseDTO, OrderRequestDTO, int>
     {
         Task<Payment> CreateAndGetPayment(Payment payment);
+        Task<OrderResponseDTO> CreateAndGet(OrderRequestDTO orderRequestDTO);
         Task<EntityFilterDTO<OrderResponseDTO>>GetAllOrder(OrderFilterDTO orderFilterDTO);
         Task<EntityFilterDTO<OrderResponseDTO>> MyOrder(string id , OrderFilterDTO orderFilterDTO);
         Task<List<OrderDetailResponseDTO>> GetOrderDetail(int id);
         Task UpdateOrderStatus(int id, OrderStatus status, string? reason);
+        Task UpdatePayment(int id, PaymentMethod method, PaymentStatus status);
         Task UpdateOrderPayment(int id, PaymentStatus status);
     }
 }

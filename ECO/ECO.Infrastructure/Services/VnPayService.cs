@@ -16,7 +16,6 @@ namespace ECO.Infrastructure.Services
         {
             var tick = DateTime.Now.Ticks.ToString();
             var vnpay = new VnPayLibrary();
-
             vnpay.AddRequestData("vnp_Version","2.1.0");
             vnpay.AddRequestData("vnp_Command", "pay");
             vnpay.AddRequestData("vnp_TmnCode", "V09CWH07");
@@ -29,7 +28,7 @@ namespace ECO.Infrastructure.Services
 
             vnpay.AddRequestData("vnp_OrderInfo", "Thanh toán cho đơn hàng:" + vnPayRequestDTO.OrderId);
             vnpay.AddRequestData("vnp_OrderType", "other"); //default value: other
-            vnpay.AddRequestData("vnp_ReturnUrl", "http://localhost:3000/payment-callback");
+            vnpay.AddRequestData("vnp_ReturnUrl", $"https://localhost:5000/api/Order/PaymentCallBack/{vnPayRequestDTO.OrderId}");
             
 
             vnpay.AddRequestData("vnp_TxnRef", tick); // Mã tham chiếu của giao dịch tại hệ thống của merchant. Mã này là duy nhất dùng để phân biệt các đơn hàng gửi sang VNPAY. Không được trùng lặp trong ngày
@@ -37,7 +36,6 @@ namespace ECO.Infrastructure.Services
             var paymentUrl = vnpay.CreateRequestUrl("https://sandbox.vnpayment.vn/paymentv2/vpcpay.html", "RSKIBQRSOMDOHZYDOXPKMOTSSJWRXGCJ");
 
             return paymentUrl;
-            throw new NotImplementedException();
         }
 
         public VnPayResponseDTO PaymentExecute(IQueryCollection collections)

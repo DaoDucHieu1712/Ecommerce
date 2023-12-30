@@ -13,6 +13,8 @@ import CartService from "../../shared/services/CartService";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import DiscountService from "../../shared/services/DiscountService";
+import { v4 as uuidv4 } from "uuid";
+import CookieService from "../../shared/helpers/CookieHelper";
 const TABLE_HEAD = [
   "SẢN PHẨM",
   "KIỂU LOẠI",
@@ -32,6 +34,12 @@ const Checkout = () => {
   const [paymentType, setPaymentType] = useState();
 
   const CreateOrderHandler = async () => {
+    var payment = {
+      amount: totalPrice,
+      method: 1,
+      status: 1,
+    };
+
     const data = {
       totalPrice: totalPrice,
       shipAddress: location,
@@ -39,11 +47,7 @@ const Checkout = () => {
       cancelReason: "",
       note: note,
       orderStatus: 1,
-      payment: {
-        amount: totalPrice,
-        method: 1,
-        status: 1,
-      },
+      payment,
       orderDetails: cart?.items.map((item) => {
         return {
           productId: item.productId,
@@ -56,12 +60,31 @@ const Checkout = () => {
     };
     await OrderService.CreateOrder(data)
       .then(async (res) => {
-        toast.success("Đặt hàng thành công !");
         await CartService.ClearCart();
         if (code) {
           await DiscountService.UseDiscount(code);
         }
-        navigate("/");
+        if (paymentType === "Chuyển khoản") {
+          await OrderService.UpdatePayment(res.id, 2, 1);
+          await OrderService.CreatePayment({
+            orderId: res.id,
+            fullName: CookieService.getCookie("eco_v1_username"),
+            description: `${CookieService.getCookie(
+              "eco_v1_username"
+            )} chuyển khoản`,
+            amount: totalPrice,
+            createdDate: Date.now,
+          })
+            .then(async (response) => {
+              window.location.href = response;
+            })
+            .catch(async (err) => {
+              toast.error(err.response.data);
+            });
+        } else {
+          toast.success("Đặt hàng thành công !");
+          navigate("/");
+        }
       })
       .catch((err) => {
         toast.error(err.response.data);

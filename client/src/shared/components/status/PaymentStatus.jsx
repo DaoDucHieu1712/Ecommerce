@@ -9,8 +9,8 @@ const PaymentStatus = ({ status }) => {
     statusName = "";
   }
   if (status === 1) {
-    classes = "text-blue-500";
-    statusName = "Đang chờ";
+    classes = "text-orange-500";
+    statusName = "Chưa thanh toán";
   }
   if (status === 2) {
     classes = "text-green-500";

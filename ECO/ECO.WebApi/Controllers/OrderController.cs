@@ -1,6 +1,7 @@
 ﻿using ECO.Application.DTOs.Orders;
 using ECO.Application.Services;
 using ECO.Domain.Enums;
+using ECO.Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +13,12 @@ namespace ECO.WebApi.Controllers
     public class OrderController : ControllerBase
     {
         private readonly IOrderService _orderService;
+        private readonly IVnPayService _vnPayService;
 
-        public OrderController(IOrderService orderService)
+        public OrderController(IOrderService orderService, IVnPayService vnPayService)
         {
             _orderService = orderService;
+            _vnPayService = vnPayService;
         }
 
         [Authorize]
@@ -24,8 +27,8 @@ namespace ECO.WebApi.Controllers
         {
             try { 
                 orderRequestDTO.CustomerId = User?.Identity?.Name ?? "";
-                await _orderService.Add(orderRequestDTO);
-                return Ok("Tạo đơn hàng thành công !!");
+                var od = await _orderService.CreateAndGet(orderRequestDTO);
+                return Ok(od);
             }
             catch (Exception ex)
             {
@@ -95,6 +98,56 @@ namespace ECO.WebApi.Controllers
             {
                 await _orderService.UpdateOrderPayment(id, status);
                 return Ok("Update successful !!");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdatePayment(int id, PaymentMethod method, PaymentStatus status)
+        {
+            try
+            {
+                await _orderService.UpdatePayment(id, method, status);
+                return Ok("Update successful !!");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetUrlPayment(VnPayRequestDTO vnPayRequestDTO)
+        {
+            try
+            {
+                var url = _vnPayService.CreatePaymentUrl(HttpContext, vnPayRequestDTO);
+                return Ok(url);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> PaymentCallBack(int id)
+        {
+            try
+            {
+                var response = _vnPayService.PaymentExecute(Request.Query);
+
+                if (response == null || response.VnPayResponseCode != "00")
+                {
+                    await _orderService.UpdatePayment(id, PaymentMethod.Bank, PaymentStatus.Fail);
+                    return Redirect("http://localhost:3000/payment-fail");
+                }
+                await _orderService.UpdatePayment(id, PaymentMethod.Bank, PaymentStatus.Success);
+                return Redirect("http://localhost:3000/payment-success");
+
             }
             catch (Exception ex)
             {
