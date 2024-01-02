@@ -61,6 +61,20 @@ namespace ECO.WebApi.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> ConfirmEmail(string userId, string code)
+        {
+            try
+            {
+                await _userService.ConfirmEmail(userId, code);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
         [HttpPost]
         public ServiceResponse GetUsersPagingTEST(DataRequest request)
         {
@@ -104,6 +118,7 @@ namespace ECO.WebApi.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> ChangePassword(ChangePasswordDTO changePasswordDTO)
         {
@@ -144,6 +159,13 @@ namespace ECO.WebApi.Controllers
             {
                 return StatusCode(500, ex.Message);
             }
+        }
+
+        [Authorize(Roles ="Admin, Staff")]
+        [HttpGet]
+        public async Task<IActionResult> CheckRole()
+        {
+            return Ok();
         }
     }
 }

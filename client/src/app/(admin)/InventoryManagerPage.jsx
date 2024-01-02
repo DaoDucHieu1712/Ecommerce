@@ -23,7 +23,7 @@ const InventoryManagerPage = () => {
   const inventoryQuery = useQuery({
     queryKey: ["inventory-manager"],
     queryFn: async () => {
-      return InventoryService.GetAllByProductId(id);
+      return InventoryService.GetAllByProductIdByAdmin(id);
     },
   });
 

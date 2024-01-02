@@ -68,7 +68,7 @@ const ProductManagerPage = () => {
   const categoryQuery = useQuery({
     queryKey: ["category-select"],
     queryFn: async () => {
-      return CategoryService.GetAll();
+      return CategoryService.GetAllByAdmin();
     },
   });
 

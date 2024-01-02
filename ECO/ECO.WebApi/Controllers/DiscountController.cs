@@ -31,6 +31,20 @@ namespace ECO.WebApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Staff")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllByAdmin()
+        {
+            try
+            {
+                return Ok(await _discountService.GetAll());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> FindById(int id)
         {
@@ -44,6 +58,7 @@ namespace ECO.WebApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Staff")]
         [HttpPost]
         public async Task<IActionResult> Create(DiscountRequestDTO discountRequestDTO)
         {
@@ -58,6 +73,7 @@ namespace ECO.WebApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Staff")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, DiscountRequestDTO discountRequestDTO)
         {
@@ -73,6 +89,7 @@ namespace ECO.WebApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Staff")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

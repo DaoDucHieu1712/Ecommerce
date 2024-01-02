@@ -12,7 +12,7 @@ const CategoryManagerPage = () => {
   const categoryQuery = useQuery({
     queryKey: ["category-admin-list"],
     queryFn: async () => {
-      return CategoryService.GetAll();
+      return CategoryService.GetAllByAdmin();
     },
   });
 

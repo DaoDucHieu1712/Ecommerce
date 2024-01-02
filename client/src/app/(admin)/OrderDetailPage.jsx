@@ -14,7 +14,7 @@ const OrderDetailPage = () => {
   const orderQuery = useQuery({
     queryKey: ["order-detail"],
     queryFn: async () => {
-      return await OrderService.FindById(id);
+      return await OrderService.FindByIdByAdmin(id);
     },
   });
 

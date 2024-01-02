@@ -20,7 +20,7 @@ const DiscountManagerPage = () => {
   const discountQuery = useQuery({
     queryKey: ["discount-manager"],
     queryFn: async () => {
-      return await DiscountService.GetAll();
+      return await DiscountService.GetAllByAdmin();
     },
   });
 

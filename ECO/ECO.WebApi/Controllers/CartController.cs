@@ -47,6 +47,7 @@ namespace ECO.WebApi.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> IncreaseQuantityCartItem(int id)
         {
@@ -61,6 +62,7 @@ namespace ECO.WebApi.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> DecreseaQuantityCartItem(int id)
         {
@@ -75,6 +77,7 @@ namespace ECO.WebApi.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> RemoveCartItem(int id)
         {

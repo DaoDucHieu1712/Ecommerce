@@ -21,6 +21,7 @@ import ReportPage from "./app/(admin)/ReportPage";
 import LoginManager from "./app/(public)/LoginManager";
 import PaymentSuccess from "./app/(auth)/PaymentSuccess";
 import PaymentFail from "./app/(auth)/PaymentFail";
+import ConfirmEmail from "./app/(auth)/ConfirmEmail";
 const NotFoundPage = lazy(() => import("./app/(public)/NotFoundPage"));
 const AccessDeniedPage = lazy(() => import("./app/(public)/AccessDeniedPage"));
 const HomePage = lazy(() => import("./app/(public)/HomePage"));
@@ -41,6 +42,7 @@ function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/login-dashboard" element={<LoginManager />} />
           <Route path="/register" element={<RegisterPage />} />
@@ -56,6 +58,9 @@ function App() {
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/payment-fail" element={<PaymentFail />} />
+          <Route path="/confirm-email" element={<ConfirmEmail />} />
+          <Route path="*" element={<NotFoundPage />} />
+          <Route path="/access-denied" element={<AccessDeniedPage />} />
         </Route>
         <Route element={<DashboardLayout />}>
           <Route path="/admin" element={<StatictisPage />} />
@@ -70,8 +75,6 @@ function App() {
             element={<InventoryManagerPage />}
           />
         </Route>
-        <Route path="*" element={<NotFoundPage />} />
-        <Route path="/access-denied" element={<AccessDeniedPage />} />
       </Routes>
     </>
   );

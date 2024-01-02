@@ -20,9 +20,10 @@ import {
 } from "@heroicons/react/24/solid";
 import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import Logo from "../../assets/DegreyLogo.webp";
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, Outlet } from "react-router-dom";
 import CookieService from "../../shared/helpers/CookieHelper";
+import AuthService from "../../shared/services/AuthService";
 
 const DashboardLayout = () => {
   const [open, setOpen] = React.useState(0);
@@ -30,6 +31,21 @@ const DashboardLayout = () => {
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
   };
+
+  useEffect(() => {
+    // AuthService.CheckRole()
+    //   .then((res) => {})
+    //   .catch((err) => {
+    //     console.log(err.response.data);
+    //   });
+  }, []);
+
+  const LogoutHandler = () => {
+    CookieService.removeCookie(process.env.REACT_APP_ECO_TOKEN);
+    CookieService.removeCookie("eco_v1_username");
+    window.location.href = "/";
+  };
+
   return (
     <>
       <div className="flex">
@@ -182,7 +198,7 @@ const DashboardLayout = () => {
               </ListItemPrefix>
               Cài đặt
             </ListItem>
-            <ListItem>
+            <ListItem onClick={LogoutHandler}>
               <ListItemPrefix>
                 <PowerIcon className="h-5 w-5" />
               </ListItemPrefix>

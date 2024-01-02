@@ -27,9 +27,13 @@ const StatictisPage = () => {
     fetchData();
   }, [year]);
   const fetchData = async () => {
-    await DashboardService.GetChart(year).then((res) => {
-      setChart(res);
-    });
+    await DashboardService.GetChart(year)
+      .then((res) => {
+        setChart(res);
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+      });
   };
 
   if (!chart || chart.length === 0) {

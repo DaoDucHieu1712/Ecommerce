@@ -25,6 +25,14 @@ const AuthService = {
     const url = `/api/User/ChangePassword`;
     return axiosConfig.post(url, data);
   },
+  async ConfirmEmail(userId, code) {
+    const url = `/api/User/ConfirmEmail?userId=${userId}&code=${code}`;
+    return axiosConfig.get(url);
+  },
+  async CheckRole() {
+    const url = "/api/User/CheckRole";
+    return axiosConfig.get(url);
+  },
 };
 
 export default AuthService;

@@ -1,4 +1,5 @@
 ﻿using ECO.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,6 +17,7 @@ namespace ECO.WebApi.Controllers
             _dashboardService = dashboardService;
         }
 
+        [Authorize(Roles = "Admin, Staff")]
         [HttpGet]
         public async Task<IActionResult> StatictisCount()
         {
@@ -29,6 +31,7 @@ namespace ECO.WebApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Staff")]
         [HttpGet("{year}")]
         public async Task<IActionResult> GetChartPrice(int year)
         {
@@ -42,6 +45,7 @@ namespace ECO.WebApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Staff")]
         [HttpGet]
         public async Task<IActionResult> GetCategoryStatistic()
         {
@@ -55,6 +59,7 @@ namespace ECO.WebApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Staff")]
         [HttpGet]
         public async Task<IActionResult> GetOrderStatistic()
         {
@@ -67,8 +72,5 @@ namespace ECO.WebApi.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-
-
-
     }
 }

@@ -36,6 +36,7 @@ namespace ECO.WebApi.Controllers
             }
         }
 
+        [Authorize(Roles ="Admin, Staff")]
         [HttpGet]
         public async Task<IActionResult> GetAllOrder([FromQuery]OrderFilterDTO orderFilterDTO)
         {
@@ -77,6 +78,21 @@ namespace ECO.WebApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Staff")]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> FindByIdByAdmin(int id)
+        {
+            try
+            {
+                return Ok(await _orderService.FindById(id));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateStatus(int id , OrderStatus status, string? reason)
         {
@@ -91,6 +107,7 @@ namespace ECO.WebApi.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePaymentStatus(int id, PaymentStatus status)
         {
@@ -105,6 +122,7 @@ namespace ECO.WebApi.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePayment(int id, PaymentMethod method, PaymentStatus status)
         {
@@ -119,6 +137,7 @@ namespace ECO.WebApi.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> GetUrlPayment(VnPayRequestDTO vnPayRequestDTO)
         {
@@ -133,6 +152,7 @@ namespace ECO.WebApi.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> PaymentCallBack(int id)
         {

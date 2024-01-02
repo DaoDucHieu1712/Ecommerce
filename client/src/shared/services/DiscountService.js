@@ -5,6 +5,10 @@ const DiscountService = {
     const url = "/api/Discount/GetAll";
     return axiosConfig.get(url);
   },
+  async GetAllByAdmin() {
+    const url = "/api/Discount/GetAllByAdmin";
+    return axiosConfig.get(url);
+  },
   async Create(data) {
     const url = "/api/Discount/Create";
     return axiosConfig.post(url, data);

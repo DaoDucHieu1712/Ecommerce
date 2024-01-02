@@ -5,6 +5,10 @@ const InventoryService = {
     const url = "/api/Inventory/GetAll";
     return axiosConfig.get(url);
   },
+  async GetAllByAdmin() {
+    const url = "/api/Inventory/GetAllByAdmin";
+    return axiosConfig.get(url);
+  },
   async Create(data) {
     const url = "/api/Inventory/Create";
     return axiosConfig.post(url, data);
@@ -19,6 +23,10 @@ const InventoryService = {
   },
   async GetAllByProductId(id) {
     const url = "/api/Inventory/GetAllByProductId/" + id;
+    return axiosConfig.get(url);
+  },
+  async GetAllByProductIdByAdmin(id) {
+    const url = "/api/Inventory/GetAllByProductIdByAdmin/" + id;
     return axiosConfig.get(url);
   },
   async AddQuantity(id, quantity) {

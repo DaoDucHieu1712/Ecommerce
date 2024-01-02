@@ -111,6 +111,11 @@ namespace ECO.Infrastructure.Services
                 throw new Exception("Email or Password is wrong !!");
             }
 
+            if(user.EmailConfirmed== false)
+            {
+                throw new Exception("Vui lòng xác nhận email !!");
+            }
+
             var roles = await _userManager.GetRolesAsync(user);
             var url = "/";
             if (roles[0] == "Admin" || roles[0] == "Staff")
@@ -144,6 +149,17 @@ namespace ECO.Infrastructure.Services
             if (!result.Succeeded) throw new Exception("Đăng ký thất bại !!");
             var roleRs = await _userManager.AddToRoleAsync(NewUser, "Customer");
             if (!roleRs.Succeeded) throw new Exception("Not Add To Role");
+            //Mail confirm
+            string code = await _userManager.GenerateEmailConfirmationTokenAsync(NewUser);
+            var ConfirmEmailLink = $"http://localhost:3000/confirm-email?userId={HttpUtility.UrlEncode(NewUser.Id)}&token={HttpUtility.UrlEncode(code)}";
+            MailModel rs = new MailModel();
+            List<string> emailTos = new List<string>();
+            emailTos.Add(user.Email);
+            rs.Subject = EmailTemplateSubjectConstant.ConfirmEmailBody;
+            string bodyEmail = string.Format(EmailTemplateBodyConstant.ConfirmEmailBody, user.Email, ConfirmEmailLink);
+            rs.Body = bodyEmail + EmailTemplateBodyConstant.SignatureFooter;
+            rs.To = emailTos;
+            await _emailService.SendEmailAsync(rs);
         }
 
         public async Task<UserDTO> GetUserByEmail(string email)
@@ -166,6 +182,18 @@ namespace ECO.Infrastructure.Services
             {
                 throw new Exception("Token đã hết hạn !");
             }
+        }
+
+        public async Task ConfirmEmail(string userId, string code)
+        {
+            if (userId == null || code == null)
+            {
+                throw new Exception("Đã hết hạn xác nhận email !");
+            }
+
+            var _user = await _userManager.FindByIdAsync(userId);
+            var result = await _userManager.ConfirmEmailAsync(_user, code);
+            if (!result.Succeeded) throw new Exception("Xác nhận Email thất bại !!");
         }
     }
 }

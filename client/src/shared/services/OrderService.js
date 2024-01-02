@@ -9,14 +9,14 @@ const OrderService = {
     const url = "/api/Order/FindById/" + id;
     return axiosConfig.get(url);
   },
+  async FindByIdByAdmin(id) {
+    const url = "/api/Order/FindByIdByAdmin/" + id;
+    return axiosConfig.get(url);
+  },
   async UpdateStatus(id, status, reason) {
     const url = `/api/Order/UpdateStatus/${id}?status=${status}&reason=${reason}`;
     return axiosConfig.put(url);
   },
-  // async UpdatePayment(id, status) {
-  //   const url = `/api/Order/UpdatePaymentStatus/${id}?status=${status}`;
-  //   return axiosConfig.put(url);
-  // },
   async UpdatePayment(id, method, status) {
     const url = `/api/Order/UpdatePayment/${id}?method=${method}&status=${status}`;
     return axiosConfig.put(url);

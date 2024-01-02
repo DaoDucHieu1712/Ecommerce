@@ -5,6 +5,10 @@ const SizeService = {
     const url = "/api/Size/GetAll";
     return axiosConfig.get(url);
   },
+  async GetAllByAdmin() {
+    const url = "/api/Size/GetAll";
+    return axiosConfig.get(url);
+  },
   async Create(data) {
     const url = "/api/Size/Create";
     return axiosConfig.post(url, data);

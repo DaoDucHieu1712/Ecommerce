@@ -13,6 +13,7 @@ namespace ECO.Infrastructure.MailHelper
     {
 
         public const string ResetPasswordSubject = "Yêu cầu Đặt lại Mật khẩu";
+        public const string ConfirmEmailBody = "Xác nhận Email";
 
     }
 
@@ -32,9 +33,15 @@ namespace ECO.Infrastructure.MailHelper
                                                 <p>&nbsp;</p>
                                                 <p><em><strong>Trân trọng,</strong></em></p>
                                                 <p>&nbsp;<em><strong>ECO DEGREY SHOP </strong></em></p>
-                                                <p><span style=""color: #3366ff;""><em>SEP490-G39</em></span></p>
-                                                <p><span style=""color: #3366ff;""><em>Đại học FPT - Hòa Lạc - Hà Nội - Việt Nam</em></span></p>
+                                                <p><span style=""color: #3366ff;""><em>ECO DEMO</em></span></p>
+                                                <p><span style=""color: #3366ff;""><em>Đại Thịnh - Mê Linh - Hà Nội</em></span></p>
                                                 <p><strong><em>CHÚC BẠN CÓ TRẢI NGHIỆM TỐT!</em></strong></p>
                                                 ";
+
+        public const string ConfirmEmailBody = @"<p>Xin chào,
+                                                    <strong>{0}</strong></p>
+                                                    <p>Để xác nhận email của bạn, vui lòng nhấp vào liên kết sau đây:</p>
+                                                    <p><a href=""{1}"">here</a></p>";
+                                                   
     }
 }

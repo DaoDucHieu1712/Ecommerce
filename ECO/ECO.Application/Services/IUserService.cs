@@ -14,6 +14,7 @@ namespace ECO.Application.Services
         public Task<AppUser> Authenicate(string username, string password);
         public Task<UserToken> Login(string username, string password);
         public Task Register(RegisterDTO user);
+        public Task ConfirmEmail(string userId, string code);
         public Task ChangePassword(ChangePasswordDTO changePasswordDTO);
         public DataResult<AppUser> GetUsersPaging(DataRequest request);
         public Task<UserDTO> GetCurrentUser(string id);
@@ -21,6 +22,10 @@ namespace ECO.Application.Services
         public Task ResetPassword(ResetPasswordDTO resetPasswordDTO);
         public Task<UserDTO> GetUserByEmail(string email);
         public Task UpdateProfile(UserDTO userDTO);
+        public Task<List<AppRole>> GetAllRole();
+        public Task DisableAccount(string userId);
+
+
         
     }
 }

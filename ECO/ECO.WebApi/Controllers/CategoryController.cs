@@ -31,6 +31,21 @@ namespace ECO.WebApi.Controllers
             }
         }
 
+        [Authorize(Roles ="Admin, Staff")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllByAdmin()
+        {
+            try
+            {
+                return Ok(await _categoryService.GetAll());
+                ;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> FindById(int id)
         {
@@ -44,6 +59,21 @@ namespace ECO.WebApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Staff")]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> FindByIdByAdmin(int id)
+        {
+            try
+            {
+                return Ok(await _categoryService.FindById(id));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [Authorize(Roles = "Admin, Staff")]
         [HttpPost]
         public async Task<IActionResult> Create(CategoryRequestDTO categoryRequestDTO)
         {
@@ -59,6 +89,7 @@ namespace ECO.WebApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Staff")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id , CategoryRequestDTO categoryRequestDTO)
         {
@@ -75,6 +106,7 @@ namespace ECO.WebApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Staff")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Remove(int id)
         {

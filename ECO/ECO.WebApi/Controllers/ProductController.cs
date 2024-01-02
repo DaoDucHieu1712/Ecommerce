@@ -1,6 +1,7 @@
 ﻿using ECO.Application.DTOs.Products;
 using ECO.Application.DTOs.Response;
 using ECO.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -42,6 +43,7 @@ namespace ECO.WebApi.Controllers
             }
         }
 
+        [Authorize(Roles ="Admin, Staff")]
         [HttpGet]
         public async Task<IActionResult> Filter([FromQuery] ProductFilterDTO productFilterDTO)
         {
@@ -56,6 +58,7 @@ namespace ECO.WebApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Staff")]
         [HttpPost]
         public async Task<IActionResult> Create(ProductRequestDTO productRequestDTO)
         {
@@ -96,6 +99,7 @@ namespace ECO.WebApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Staff")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, ProductRequestDTO productRequestDTO)
         {
@@ -111,6 +115,7 @@ namespace ECO.WebApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Staff")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Remove(int id)
         {

@@ -1,5 +1,6 @@
 ﻿using ECO.Application.DTOs.Color;
 using ECO.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,6 +30,21 @@ namespace ECO.WebApi.Controllers
             }
         }
 
+        [Authorize(Roles ="Admin, Staff")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllByAdmin()
+        {
+            try
+            {
+                return Ok(await _colorService.GetAll());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [Authorize(Roles = "Admin, Staff")]
         [HttpPost]
         public async Task<IActionResult> Create(ColorRequestDTO colorRequestDTO)
         {
@@ -56,6 +72,21 @@ namespace ECO.WebApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Staff")]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> FindByIdByAdmin(int id)
+        {
+            try
+            {
+                return Ok(await _colorService.FindById(id));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [Authorize(Roles = "Admin, Staff")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, ColorRequestDTO colorRequestDTO)
         {
@@ -71,6 +102,7 @@ namespace ECO.WebApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Staff")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Remove(int id)
         {
